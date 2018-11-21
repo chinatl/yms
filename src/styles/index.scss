@@ -1,0 +1,104 @@
+@import './transition.scss';
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box
+}
+body {
+  background-color: rgb(245, 245, 252);
+}
+.box-item {
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #fff;
+  margin-bottom: 24px;
+  border: 1px solid rgb(235, 235, 237);
+}
+.box-item-form {
+  padding: 30px 0 10px;
+  font-size: 16px;
+}
+.table-content {
+  padding: 20px 0 10px;
+  .el-table th.is-leaf, .el-table tr.is-leaf {
+    background-color: rgb(235,235,237);
+    color: #000;
+    font-size: 15px;
+  }
+  tbody  {
+    tr {
+      font-size: 15px
+    }
+  }
+}
+//弹窗样式
+.common-dialog {
+  &.edu {
+    .el-dialog {
+      width: 846px
+    }
+  }
+  .el-dialog {
+    width: 600px;
+    // margin-top: 10vh!important;
+    .el-dialog__header {
+      border-bottom: 1px solid #e5e5e5;
+      .el-dialog__title {
+        color: rgb(103, 106, 108);
+        font-size: 14px;
+        font-weight: 600;
+      }
+    }
+    .el-dialog__body {
+      padding: 20px 30px;
+      padding-bottom: 10px;
+      .el-form-item {
+        margin-bottom: 16px;
+        .el-checkbox+.el-checkbox {
+          margin-left: 0px;
+        }
+        .el-checkbox {
+          margin-right: 30px;
+          line-height: 0px;
+        }
+        .el-checkbox-group {
+          margin-top: 6px;
+        }
+        .dialog-img-container {
+          overflow: hidden;
+          img {
+            float: left;
+            height: 60px;
+          }
+          .el-icon-close {
+            float: left;
+            font-size: 18px;
+            margin-left: 4px;
+            &:hover {
+              color: #409EFF;
+              cursor: pointer;
+            }
+          }
+        }
+        .form-tips {
+          padding: 0;
+          color: #737373;
+          font-size: 13px;
+          line-height: 1;
+          margin-top: 5px;
+        }
+      }
+    }
+  }
+  &.padding0 {
+    .el-dialog {
+      margin-bottom: 6vh;
+    }
+    .el-dialog__body {
+      .el-form-item {
+        margin-bottom: 0px;
+      }
+    }
+  }
+}
