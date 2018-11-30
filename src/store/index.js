@@ -23,8 +23,12 @@ const store = new Vuex.Store({
      */
     getEdu({ state, commit }) {
       get("dict").then(res => {
-        commit(SET_EDU_DICT, res.data.education);
         commit(SET_DICT,res.data)
+        commit(SET_EDU_DICT, res.data.education);
+        sessionStorage.setItem(
+          SET_DICT,
+          JSON.stringify(res.data)
+        );
         sessionStorage.setItem(
           SET_EDU_DICT,
           JSON.stringify(res.data.education)

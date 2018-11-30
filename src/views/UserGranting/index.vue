@@ -199,6 +199,7 @@ export default {
       let yfTypeStr = ``
       let eduStr = ``
       let armsStr = ``
+      if (!this.dict.yfType) return;
       this.dict.yfType.filter(f => {
         if (yfType === f.value) {
           yfTypeStr = f.label
@@ -218,6 +219,7 @@ export default {
     },
     getBankType(backType) {
       let str = ``
+      if (!this.dict.bank) return;
       this.dict.bank.filter(f => {
         if (backType === f.value) {
           str = f.label

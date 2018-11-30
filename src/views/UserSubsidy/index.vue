@@ -145,7 +145,7 @@ export default {
   },
   methods: {
     /**
-     * params ==>  status  1 待提交,2待审核,3未通过,4已通过,5待发放,6,发放中,7已停发
+     * params ==>  status  1 待提交,2待审核,3未通过,4已通过,5待发放,6,已发放,7已停发
      * 在这里只需要取 2， 3 ，4 的状态
      */
     getApplyStatus(status) {
@@ -164,7 +164,7 @@ export default {
           str = "待发放";
           break;
         case 6:
-          str = "发放中";
+          str = "已发放";
           break;
         case 7:
           str = "已停发";
