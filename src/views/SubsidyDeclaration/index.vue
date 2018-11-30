@@ -18,7 +18,7 @@
                     </el-form-item>
                     <el-form-item label="义务兵学历：" prop="csmanEducation">
                         <el-select v-model="formInline.csmanEducation" placeholder="请选择义务兵学历" size="medium"  @change="select_city_options" style="width:202px">
-                            <el-option v-for="item in edu_options" :key="item.value" :label="item.label" :value="item.value">
+                            <el-option v-for="item in dict_edu" :key="item.value" :label="item.label" :value="item.value">
                             </el-option>
                         </el-select>
                     </el-form-item>
@@ -86,6 +86,7 @@ import tTitle from "@/components/tTitle";
 import uploadFile from "@/components/uploadFile";
 import region from "@/assets/region";
 import { validateIdCard, validatePhone } from "@/utils/validate";
+import { mapGetters } from "vuex";
 export default {
   components: {
     tTitle,
@@ -197,16 +198,7 @@ export default {
       }
     };
     return {
-      edu_options: [
-        {
-          label: "高中",
-          value: 1
-        },
-        {
-          label: "大学",
-          value: 2
-        }
-      ],
+      edu_options: [],
       province_options: [],
       city_options: [],
       county_options: [],
@@ -248,12 +240,32 @@ export default {
           { type: "number", message: "银行卡号必须为数字值" }
         ]
       },
-      idcardFrontPhotoId: {},
-      idcardBackPhotoId: {},
-      transactorPhotoId: {},
-      csmanNoticePhotoId: {},
-      csmanHukouPhotoId: {}
+      idcardFrontPhotoId: {
+        src: "",
+        id: ""
+      },
+      idcardBackPhotoId: {
+        src: "",
+        id: ""
+      },
+      transactorPhotoId: {
+        src: "",
+        id: ""
+      },
+      csmanNoticePhotoId: {
+        src: "",
+        id: ""
+      },
+      csmanHukouPhotoId: {
+        src: "",
+        id: ""
+      },
+      id: ``,
+      userId: ``
     };
+  },
+  computed: {
+    ...mapGetters([`applyInfo`, `dict_edu`, `user_info`])
   },
   created() {
     var list = region["100000"];
@@ -262,6 +274,9 @@ export default {
         value: key,
         label: list[key]
       });
+    }
+    if (this.$route.query.hasOwnProperty("temp")) {
+      this.getUserApplyInfo(this.applyInfo.csmanNoticeNo);
     }
   },
   methods: {
@@ -326,6 +341,100 @@ export default {
           }
         });
       });
+      let option = {
+        ...this.formInline,
+        ...this.user_form,
+        idcardFrontPhotoId: this.idcardFrontPhotoId.id,
+        idcardBackPhotoId: this.idcardBackPhotoId.id,
+        transactorPhotoId: this.transactorPhotoId.id,
+        csmanNoticePhotoId: this.csmanNoticePhotoId.id,
+        csmanHukouPhotoId: this.csmanHukouPhotoId.id
+      };
+      console.log(JSON.stringify(option));
+      if (this.$route.query.hasOwnProperty("temp")) {
+        option.id = this.id;
+        option.userId = this.userId;
+        this.$post(`yfcsman/UpdateYFCsman`, option, "json").then(res => {
+          if (res.code === 0) {
+            this.$router.push(`/UserDeclaration/index`);
+          }
+        });
+      } else {
+        // option.id = this.user_info.id;
+        option.userId = this.user_info.id;
+        this.$post(`yfcsman/addCsman`, option).then(res => {
+          if (res.code === 0) {
+            this.$router.push(`/UserDeclaration/index`);
+          }
+        });
+      }
+    },
+    /**
+     * csmanNoticeNo 获取用户详情 义务兵通知书号码
+     */
+    getUserApplyInfo(csmanNoticeNo) {
+      this.$post(`yfcsman/QueryYFCsman/${csmanNoticeNo}`)
+        .then(res => {
+          const data = res.data;
+          this.formInline.csmanName = data.csmanName;
+          this.formInline.csmanIdcard = data.csmanIdcard;
+          this.formInline.csmanNoticeNo = data.csmanNoticeNo;
+          this.formInline.csmanSchool = data.csmanSchool;
+          this.formInline.csmanEducation = data.csmanEducation - 0;
+          this.formInline.province = data.province;
+          this.select_city_options(data.province);
+          this.formInline.city = data.city;
+          this.select_county_options(data.city);
+          this.formInline.county = data.county;
+          this.formInline.addressDetail = data.addressDetail;
+          this.user_form.receiptorName = data.receiptorName;
+          this.user_form.receiptorIdcard = data.receiptorIdcard;
+          this.user_form.receiptorPhone = data.receiptorPhone;
+          this.user_form.account = data.account - 0;
+          this.idcardFrontPhotoId.id =
+            data.idcardFrontPhoto && data.idcardFrontPhoto.fileId;
+          this.idcardFrontPhotoId.src =
+            "/" +
+            `${data.idcardFrontPhoto.attaPath}` +
+            "/" +
+            `${data.idcardFrontPhoto.smallImgName}`;
+          this.idcardFrontPhotoId.src = this.idcardFrontPhotoId.src;
+          console.log(this.idcardFrontPhotoId.src);
+          this.idcardBackPhotoId.id =
+            data.idcardBackPhoto && data.idcardBackPhoto.fileId;
+          this.idcardBackPhotoId.src =
+            "/" +
+            `${data.idcardBackPhoto.attaPath}` +
+            "/" +
+            `${data.idcardBackPhoto.smallImgName}`;
+          this.transactorPhotoId.id =
+            data.transactorPhoto && data.transactorPhoto.fileId;
+          this.transactorPhotoId.src =
+            "/" +
+            `${data.transactorPhoto.attaPath}` +
+            "/" +
+            `${data.transactorPhoto.smallImgName}`;
+          this.csmanNoticePhotoId.id =
+            data.csmanNoticePhoto && data.csmanNoticePhoto.fileId;
+          this.csmanNoticePhotoId.src =
+            "/" +
+            `${data.csmanNoticePhoto.attaPath}` +
+            "/" +
+            `${data.csmanNoticePhoto.smallImgName}`;
+          this.csmanHukouPhotoId.id =
+            data.csmanHukouPhoto && data.csmanHukouPhoto.fileId;
+          this.csmanHukouPhotoId.src =
+            "/" +
+            `${data.csmanHukouPhoto.attaPath}` +
+            "/" +
+            `${data.csmanHukouPhoto.smallImgName}`;
+          this.userId = data.userId;
+          this.id = data.id;
+          console.log(this.idcardFrontPhotoId);
+        })
+        .catch(res => {
+          console.log(res);
+        });
     },
     select_city_options(e) {
       if (!e) return;

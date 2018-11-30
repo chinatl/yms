@@ -68,7 +68,7 @@ export default {
       },
       loginForm: {
         username: "19802920205",
-        userCode: "800185"
+        userCode: "839091"
       },
       loading: false,
       loginRules: {
@@ -155,7 +155,8 @@ export default {
               type: "success"
             });
             this.$store.commit(SET_USER_INFO, res.data);
-            this.$router.push("/SubsidyDeclaration/index");
+            this.$router.push("/UserDeclaration/index");
+            this.$store.dispatch("getEdu");
           })
           .catch(res => {
             this.loading = false;
