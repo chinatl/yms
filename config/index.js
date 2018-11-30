@@ -17,7 +17,7 @@ module.exports = {
         // target: 'http://192.168.31.9:8081',  // 接口域名 - 陈小东
         // target: 'http://192.168.31.8:8081',  // 接口域名 - 景蒙
         // target: 'http://192.168.31.10:8081',  // 接口域名 - 陈普
-        target: 'http://192.168.31.14:8081',  // 接口域名 - 朱文枭
+        target: 'http://192.168.31.202:8081',  // 接口域名 - 朱文枭
         // changeOrigin: true,  //是否跨域
         // pathRewrite: {
         //   '^/apis': ''   //需要rewrite重写的,
