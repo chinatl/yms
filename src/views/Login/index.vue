@@ -67,8 +67,8 @@ export default {
         backgroundImage: "url(" + require("@/assets/img/城市元素.png") + ")"
       },
       loginForm: {
-        username: "19802920205",
-        userCode: "839091"
+        username: "",
+        userCode: ""
       },
       loading: false,
       loginRules: {

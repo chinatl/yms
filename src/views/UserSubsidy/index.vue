@@ -8,7 +8,7 @@
           <el-table-column prop="receiptorName" align="center" label="领取人姓名"></el-table-column>
           <el-table-column prop="receiptorIdcard" align="center" label="领取人身份证"></el-table-column>
           <el-table-column prop="receiptorPhone" align="center" label="联系电话"></el-table-column>
-          <el-table-column prop="status" align="center" label="申报状态">
+          <el-table-column prop="status" align="center" label="发放状态">
             <template slot-scope="scope">
               <span
                 :style="{

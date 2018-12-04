@@ -99,6 +99,7 @@
                 placeholder="请选择义务兵学历"
                 size="medium"
                 @change="select_city_options"
+                :disabled="true"
                 style="width:202px"
               >
                 <el-option
@@ -106,7 +107,6 @@
                   :key="item.value"
                   :label="item.label"
                   :value="item.value"
-                  :disabled="true"
                 ></el-option>
               </el-select>
             </el-form-item>
@@ -117,6 +117,7 @@
                 placeholder="请选择省份"
                 size="medium"
                 @change="select_city_options"
+                :disabled="true"
                 style="width:202px"
               >
                 <el-option
@@ -124,7 +125,6 @@
                   :key="item.value"
                   :label="item.label"
                   :value="item.value"
-                  :disabled="true"
                 ></el-option>
               </el-select>
             </el-form-item>
@@ -134,6 +134,7 @@
                 filterable
                 placeholder="请选择地区"
                 size="medium"
+                :disabled="true"
                 @change="select_county_options"
                 style="width:202px"
               >
@@ -142,7 +143,6 @@
                   :key="item.value"
                   :label="item.label"
                   :value="item.value"
-                  :disabled="true"
                 ></el-option>
               </el-select>
             </el-form-item>
@@ -153,6 +153,7 @@
                 placeholder="请选择市县"
                 size="medium"
                 @change="select_address"
+                :disabled="true"
                 style="width:202px"
               >
                 <el-option
@@ -160,7 +161,6 @@
                   :key="item.value"
                   :label="item.label"
                   :value="item.value"
-                  :disabled="true"
                 ></el-option>
               </el-select>
             </el-form-item>

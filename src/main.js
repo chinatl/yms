@@ -6,7 +6,6 @@ import App from './App'
 import router from './router'
 import '@/styles/index.scss' // global css
 import store from './store'
-
 import {
   Button,
   FormItem,
@@ -41,7 +40,28 @@ Vue.use(Option);
 Vue.use(pagination);
 Vue.use(Loading.directive);
 Vue.prototype.$message = Message;
-
+Vue.filter('formatDate',function (value, fmt) {
+    let getDate = new Date(value);
+    let o = {
+      'M+': getDate.getMonth() + 1,
+      'd+': getDate.getDate(),
+      'h+': getDate.getHours(),
+      'm+': getDate.getMinutes(),
+      's+': getDate.getSeconds(),
+      'q+': Math.floor((getDate.getMonth() + 3) / 3),
+      'S': getDate.getMilliseconds()
+    };
+    if (/(y+)/.test(fmt)) {
+      fmt = fmt.replace(RegExp.$1, (getDate.getFullYear() + '').substr(4 - RegExp.$1.length))
+    }
+    for (let k in o) {
+      if (new RegExp('(' + k + ')').test(fmt)) {
+        fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)))
+      }
+    }
+    return fmt;
+  }
+)
 
 import '@/icons' // icon
 
