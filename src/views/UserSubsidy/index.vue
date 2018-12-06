@@ -15,7 +15,7 @@
           </el-table-column>
           <el-table-column prop="standardAmount" align="center" label="补助标准"></el-table-column>
           <el-table-column prop="subsidyDuration" align="center" label="补助时长(月)"></el-table-column>
-          <el-table-column prop="receiptorIdcard" align="center" label="高原兵补助(元)"></el-table-column>
+          <el-table-column prop="plateauSubsidy" align="center" label="高原兵补助(元)"></el-table-column>
           <el-table-column prop="subsidyMoney" align="center" label="补助总额(元)"></el-table-column>
           <el-table-column prop="status" align="center" label="补助状态">
             <template slot-scope="scope">
