@@ -12,7 +12,7 @@
             <template slot-scope="scope">
               <span
                 :style="{
-                                color: ![4,5].includes(scope.row.status) ? 'red':'green'
+                                color: [3,7].includes(scope.row.status) ? 'red':'green'
                             }"
               >{{getApplyStatus(scope.row.status)}}</span>
             </template>
@@ -261,6 +261,13 @@
             info="点击拍摄义务兵户口本"
             title="上传义务兵户口本照片"
             :data="csmanHukouPhotoId"
+            :isRemove="false"
+          ></upload-file>
+          <upload-file
+            bgc="银行卡"
+            info="点击拍摄银行卡"
+            title="上传银行卡照片"
+            :data="receiptorBankPhotoId"
             :isRemove="false"
           ></upload-file>
         </div>
@@ -524,6 +531,10 @@ export default {
         src: "",
         id: ""
       },
+      receiptorBankPhotoId: {
+        src: "",
+        id: ""
+      },
       id: ``,
       userId: ``
     };
@@ -559,13 +570,17 @@ export default {
         case 3:
           str = "未通过";
           break;
-        case 4:
-          str = "已通过";
+        case 7:
+          str = "已停发";
           break;
-        case 5:
-          str = "已通过";
-          break;
+        // case 4:
+        //   str = "已通过";
+        //   break;
+        // case 5:
+        //   str = "已通过";
+        //   break;
         default:
+          str = "已通过"
           break;
       }
       return str;
@@ -646,7 +661,6 @@ export default {
             "/" +
             `${data.idcardFrontPhoto.smallImgName}`;
           this.idcardFrontPhotoId.src = this.idcardFrontPhotoId.src;
-          console.log(this.idcardFrontPhotoId.src);
           this.idcardBackPhotoId.id =
             data.idcardBackPhoto && data.idcardBackPhoto.fileId;
           this.idcardBackPhotoId.src =
@@ -675,9 +689,15 @@ export default {
             `${data.csmanHukouPhoto.attaPath}` +
             "/" +
             `${data.csmanHukouPhoto.smallImgName}`;
+          this.receiptorBankPhotoId.id =
+            data.receiptorBankPhoto && data.receiptorBankPhoto.fileId;
+          this.receiptorBankPhotoId.src =
+            "/" +
+            `${data.receiptorBankPhoto.attaPath}` +
+            "/" +
+            `${data.receiptorBankPhoto.smallImgName}`;
           this.userId = data.userId;
           this.id = data.id;
-          console.log(this.idcardFrontPhotoId);
         })
         .catch(res => {
           console.log(res);

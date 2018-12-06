@@ -13,7 +13,7 @@
                       <el-form :model="loginForm" :rules="loginRules" ref="loginForm">
                           <el-form-item prop="username">
                               <div class="input-item">
-                                  <el-input v-model.trim="loginForm.username" placeholder="请输入用户名" maxlength="30">
+                                  <el-input v-model.trim="loginForm.username" placeholder="请输入手机号码" maxlength="30">
                                   </el-input>
                                   <img :src="require('@/assets/img/用户名icon.png')" alt="" class="icon">
                               </div>
@@ -86,14 +86,14 @@ export default {
     send_code() {
       if (!this.loginForm.username) {
         this.$message({
-          message: "请输入用户名",
+          message: "请输入手机号码",
           type: "warning"
         });
         return;
       }
       if (!validatePhone(this.loginForm.username)) {
         this.$message({
-          message: "用户名不合法",
+          message: "手机号不合法",
           type: "warning"
         });
         return;

@@ -22,7 +22,7 @@
           </el-form-item>
           <el-form-item label="义务兵学历：" prop="csmanEducation">
             <el-select v-model="formInline.csmanEducation" placeholder="请选择义务兵学历" size="medium"
-                       @change="select_city_options" style="width:202px">
+                       style="width:202px">
               <el-option v-for="item in dict_edu" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
             </el-select>
@@ -35,14 +35,14 @@
             </el-select>
           </el-form-item>
           <el-form-item prop="city" ref="city">
-            <el-select v-model="formInline.city" filterable placeholder="请选择地区" size="medium"
+            <el-select v-model="formInline.city" filterable placeholder="请选择地市  " size="medium"
                        @change="select_county_options" style="width:202px">
               <el-option v-for="item in city_options" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
             </el-select>
           </el-form-item>
           <el-form-item prop="county" ref="county">
-            <el-select v-model="formInline.county" filterable placeholder="请选择市县" size="medium" @change="select_address"
+            <el-select v-model="formInline.county" filterable placeholder="请选择区县" size="medium" @change="select_address"
                        style="width:202px">
               <el-option v-for="item in county_options" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
@@ -72,7 +72,7 @@
                       maxlength="20"></el-input>
           </el-form-item>
           <el-form-item label="银行卡号：" prop="account">
-            <el-input v-model.number.trim="user_form.account" placeholder="请输入银行卡号" size="medium"
+            <el-input v-model.trim="user_form.account" placeholder="请输入银行卡号" size="medium"
                       maxlength="20"></el-input>
           </el-form-item>
         </el-form>
@@ -85,18 +85,18 @@
                      @remove='idcardFrontPhotoId.src = ""'></upload-file>
         <upload-file bgc='身份证反' info='点击拍摄身份证反面' title="上传领取人身份证反面照片" :data='idcardBackPhotoId' @upload='upload2'
                      @remove='idcardBackPhotoId.src = ""'></upload-file>
-        <upload-file bgc='人物照片' info='点击拍摄办理人照片' title="上传办理人照片" :data='transactorPhotoId' @upload='upload3'
-                     @remove='transactorPhotoId.src = ""'></upload-file>
+        <upload-file bgc='银行卡' info='点击拍摄银行卡' title="上传银行卡照片" :data='receiptorBankPhotoId' @upload='upload6'
+                     @remove='receiptorBankPhotoId.src = ""'></upload-file>
         <upload-file bgc='通知书例' info='点击拍摄义务兵入伍通知书' title="上传义务兵入伍通知书照片" :data='csmanNoticePhotoId' @upload='upload4'
                      @remove='csmanNoticePhotoId.src = ""'></upload-file>
-        <upload-file bgc='人物照片' info='点击拍摄义务兵户口本' title="上传义务兵户口本照片" :data='csmanHukouPhotoId' @upload='upload5'
+        <upload-file bgc='户口本' info='点击拍摄义务兵户口本' title="上传义务兵户口本照片" :data='csmanHukouPhotoId' @upload='upload5'
                      @remove='csmanHukouPhotoId.src = ""'></upload-file>
-        <upload-file bgc='人物照片' info='点击拍摄银行卡' title="上传银行卡照片" :data='csmanHukouPhotoId' @upload='upload5'
-                     @remove='csmanHukouPhotoId.src = ""'></upload-file>
+        <upload-file bgc='人物照片' info='点击拍摄办理人照片' title="上传办理人照片" :data='transactorPhotoId' @upload='upload3'
+                     @remove='transactorPhotoId.src = ""'></upload-file>
       </div>
     </div>
     <div style="text-align: right;">
-      <el-button type="danger">取消</el-button>
+      <el-button type="danger" @click.stop="back" v-show="isEdit">取消</el-button>
       <el-button type="primary" @click="onSubmit">申报</el-button>
     </div>
   </div>
@@ -215,7 +215,11 @@
         if (!value) {
           callback(new Error("请输入银行卡号"));
         } else {
-          callback();
+          if(/^\d*$/.test(value)) {
+            callback();
+          } else {
+            callback(new Error('请输入正确格式'))
+          }
         }
       };
       return {
@@ -257,8 +261,7 @@
           receiptorIdcard: [{trigger: "blur", validator: checkReceiptorIdcard}],
           receiptorPhone: [{trigger: "blur", validator: checkReceiptorPhone}],
           account: [
-            {trigger: "blur", validator: checkAccount},
-            {type: "number", message: "银行卡号必须为数字值"}
+            {trigger: "change", validator: checkAccount},
           ]
         },
         idcardFrontPhotoId: {
@@ -281,12 +284,22 @@
           src: "",
           id: ""
         },
+        receiptorBankPhotoId: {
+          src: "",
+          id: ""
+        }, // 银行卡照片
+        isEdit: false, // 是否是从我的申报编辑来的。而不是直接跳转
         id: ``,
         userId: ``
       };
     },
     computed: {
       ...mapGetters([`applyInfo`, `dict_edu`, `user_info`])
+    },
+    watch: {
+      // 'user_form.account': function (val) {
+      //   this.user_form.account = val - 0
+      // }
     },
     created() {
       var list = region["100000"];
@@ -298,6 +311,7 @@
       }
       if (this.$route.query.hasOwnProperty("temp")) {
         this.getUserApplyInfo(this.applyInfo.csmanNoticeNo);
+        this.isEdit = true
       }
     },
     methods: {
@@ -321,6 +335,13 @@
         this.csmanHukouPhotoId.src = e.fullAttaPath;
         this.csmanHukouPhotoId.id = e.fileId;
       },
+      upload6(e) {
+        this.receiptorBankPhotoId.src = e.fullAttaPath;
+        this.receiptorBankPhotoId.id = e.fileId;
+      },
+      back() {
+        this.$router.go(-1)
+      },
       onSubmit() {
         this.$refs.formInline.validate(res => {
           this.$refs.user_form.validate(response => {
@@ -339,10 +360,10 @@
               });
               return;
             }
-            if (!this.transactorPhotoId.src) {
+            if (!this.receiptorBankPhotoId.src) {
               this.$message({
                 type: "warning",
-                message: "请上传办理人照片"
+                message: "请上传银行卡照片"
               });
               return;
             }
@@ -367,7 +388,8 @@
               idcardBackPhotoId: this.idcardBackPhotoId.id,
               transactorPhotoId: this.transactorPhotoId.id,
               csmanNoticePhotoId: this.csmanNoticePhotoId.id,
-              csmanHukouPhotoId: this.csmanHukouPhotoId.id
+              csmanHukouPhotoId: this.csmanHukouPhotoId.id,
+              receiptorBankPhotoId: this.receiptorBankPhotoId.id
             };
             if (this.$route.query.hasOwnProperty("temp")) {
               option.id = this.id;
@@ -411,42 +433,61 @@
             this.user_form.receiptorIdcard = data.receiptorIdcard;
             this.user_form.receiptorPhone = data.receiptorPhone;
             this.user_form.account = data.account - 0;
-            this.idcardFrontPhotoId.id =
-              data.idcardFrontPhoto && data.idcardFrontPhoto.fileId;
-            this.idcardFrontPhotoId.src =
-              "/" +
-              `${data.idcardFrontPhoto.attaPath}` +
-              "/" +
-              `${data.idcardFrontPhoto.smallImgName}`;
-            this.idcardFrontPhotoId.src = this.idcardFrontPhotoId.src;
-            this.idcardBackPhotoId.id =
-              data.idcardBackPhoto && data.idcardBackPhoto.fileId;
-            this.idcardBackPhotoId.src =
-              "/" +
-              `${data.idcardBackPhoto.attaPath}` +
-              "/" +
-              `${data.idcardBackPhoto.smallImgName}`;
-            this.transactorPhotoId.id =
-              data.transactorPhoto && data.transactorPhoto.fileId;
-            this.transactorPhotoId.src =
-              "/" +
-              `${data.transactorPhoto.attaPath}` +
-              "/" +
-              `${data.transactorPhoto.smallImgName}`;
-            this.csmanNoticePhotoId.id =
-              data.csmanNoticePhoto && data.csmanNoticePhoto.fileId;
-            this.csmanNoticePhotoId.src =
-              "/" +
-              `${data.csmanNoticePhoto.attaPath}` +
-              "/" +
-              `${data.csmanNoticePhoto.smallImgName}`;
-            this.csmanHukouPhotoId.id =
-              data.csmanHukouPhoto && data.csmanHukouPhoto.fileId;
-            this.csmanHukouPhotoId.src =
-              "/" +
-              `${data.csmanHukouPhoto.attaPath}` +
-              "/" +
-              `${data.csmanHukouPhoto.smallImgName}`;
+            if (data.idcardFrontPhoto.fileId !== null) {
+              this.idcardFrontPhotoId.id =
+                data.idcardFrontPhoto && data.idcardFrontPhoto.fileId;
+              this.idcardFrontPhotoId.src =
+                "/" +
+                `${data.idcardFrontPhoto.attaPath}` +
+                "/" +
+                `${data.idcardFrontPhoto.smallImgName}`;
+            }
+            if (data.idcardBackPhoto.fileId !== null) {
+              this.idcardBackPhotoId.id =
+                data.idcardBackPhoto && data.idcardBackPhoto.fileId;
+              this.idcardBackPhotoId.src =
+                "/" +
+                `${data.idcardBackPhoto.attaPath}` +
+                "/" +
+                `${data.idcardBackPhoto.smallImgName}`;
+            }
+            if (data.transactorPhoto.fileId !== null) {
+              this.transactorPhotoId.id =
+                data.transactorPhoto && data.transactorPhoto.fileId;
+              this.transactorPhotoId.src =
+                "/" +
+                `${data.transactorPhoto.attaPath}` +
+                "/" +
+                `${data.transactorPhoto.smallImgName}`;
+            }
+            if (data.csmanNoticePhoto.fileId !== null) {
+              this.csmanNoticePhotoId.id =
+                data.csmanNoticePhoto && data.csmanNoticePhoto.fileId;
+              this.csmanNoticePhotoId.src =
+                "/" +
+                `${data.csmanNoticePhoto.attaPath}` +
+                "/" +
+                `${data.csmanNoticePhoto.smallImgName}`;
+            }
+            if (data.csmanHukouPhoto.fileId !== null) {
+              this.csmanHukouPhotoId.id =
+                data.csmanHukouPhoto && data.csmanHukouPhoto.fileId;
+              this.csmanHukouPhotoId.src =
+                "/" +
+                `${data.csmanHukouPhoto.attaPath}` +
+                "/" +
+                `${data.csmanHukouPhoto.smallImgName}`;
+            }
+            // todo
+            if (data.receiptorBankPhoto.fileId !== null) {
+              this.receiptorBankPhotoId.id =
+                data.receiptorBankPhoto && data.receiptorBankPhoto.fileId;
+              this.receiptorBankPhotoId.src =
+                "/" +
+                `${data.receiptorBankPhoto.attaPath}` +
+                "/" +
+                `${data.receiptorBankPhoto.smallImgName}`;
+            }
             this.userId = data.userId;
             this.id = data.id;
           })
