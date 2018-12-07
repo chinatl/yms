@@ -26,6 +26,13 @@
               >{{getApplyStatus(scope.row.status)}}</span>
             </template>
           </el-table-column>
+          <el-table-column prop="stopReason" align="center" label="备注">
+            <template slot-scope="scope">
+              <el-tooltip class="item" effect="dark" :content="scope.row.stopReason" placement="top-start">
+                   <p>{{scope.row.stopReason | stringFun}}</p>
+              </el-tooltip>
+            </template> 
+          </el-table-column>
         </el-table>
       </div>
       <div class="common-page">

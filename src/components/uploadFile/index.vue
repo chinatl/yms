@@ -44,7 +44,7 @@ export default {
   },
   methods: {
     upload_img(e) {
-      if (!/\.(png|jpg|jpeg|PNG|JPG|JPEG?g)(\?.*)?$/.test(e.name)) {
+      if (!/\.(png|jpg|jpeg|PNG|JPEG|JPG)(\?.*)?$/.test(e.name)) {
         this.$message({
           message: "请上传jpg,png,jpeg等图片格式文件",
           type: "warning"

@@ -22,7 +22,8 @@ import {
   Upload,
   Dialog,
   Option,
-  pagination
+  pagination,
+  tooltip
 } from 'element-ui';
 Vue.use(Button)
 Vue.use(FormItem)
@@ -38,6 +39,7 @@ Vue.use(Upload);
 Vue.use(Dialog);
 Vue.use(Option);
 Vue.use(pagination);
+Vue.use(tooltip);
 Vue.use(Loading.directive);
 Vue.prototype.$message = Message;
 Vue.filter('formatDate',function (value, fmt) {
@@ -62,6 +64,15 @@ Vue.filter('formatDate',function (value, fmt) {
     return fmt;
   }
 )
+Vue.filter('stringFun', function(val) {
+  if (val) {
+    if (val.length > 4) {
+      return val.slice(0, 4) + '...';
+    }
+    return val;
+  }
+  return "";
+})
 
 import '@/icons' // icon
 

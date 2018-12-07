@@ -231,14 +231,14 @@
           <upload-file
             bgc="身份证正"
             info="点击拍摄身份证正面"
-            title="上传身份证正面照片"
+            title="上传领取人身份证正面照片"
             :data="idcardFrontPhotoId"
             :isRemove="false"
           ></upload-file>
           <upload-file
             bgc="身份证反"
             info="点击拍摄身份证反面"
-            title="上传身份证反面照片"
+            title="上传领取人身份证反面照片"
             :data="idcardBackPhotoId"
             :isRemove="false"
           ></upload-file>
