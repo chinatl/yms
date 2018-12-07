@@ -103,7 +103,7 @@
         </p>
         <p>
           <span>补助总额：</span>
-          <span class="spanTypeWidth spanWidth">{{user_data.SUBSIDY_DURATION}}</span>
+          <span class="spanTypeWidth spanWidth">{{user_data.totalMoney}}</span>
           元
         </p>
         <p>
@@ -119,7 +119,6 @@
           <span>增发金额：</span>
           <el-input
             size="small"
-            placeholder="请输入增发金额"
             style="width: 350px;margin-right:15px;"
             v-model="user_data.ADDITIONAL_MONEY"
             readonly
@@ -130,7 +129,6 @@
           <el-input
             size="small"
             type="textarea"
-            placeholder="请输入增发原因"
             style="width: 350px;margin-right:15px;"
             v-model="user_data.ADDITONAL_REASON"
             readonly
@@ -138,12 +136,7 @@
         </p>
         <p>
           <span>发放总额：</span>
-          <el-input
-            size="small"
-            :readonly="true"
-            style="width: 350px;margin-right:15px;"
-            v-model="user_data.GRANT_MONEY"
-          ></el-input>
+          <span class="spanTypeWidth spanWidth">{{user_data.SUBSIDY_MONEY}}</span>
           元
         </p>
         <p>
@@ -179,10 +172,11 @@
           PREFERENTIAL_TYPE: 1, // 优抚类别
           ACCOUNT: "", // 银行卡号
           SUBSIDY_DURATION: 0, // 补助时长
-          STANDARD_MONEY: 0, // 标准金额
-          INCREASE_MONEY: 0, // 增发金额
+          // todo : 这里做个标记,以后计算
+          totalMoney:"", // 补助总额
+          STANDARD_AMOUNT: 0, // 标准金额
           ADDITIONAL_MONEY: 0, // 增发金额
-          PLATEAU_SUBSIDY:0, // 如果是高原兵的话。
+          PLATEAU_SUBSIDY: 0, // 如果是高原兵的话。
           GRANT_MONEY: 0, // 发放金额(总额)
           GRANT_ORG: "", // 发放机构
           GRANT_TIME: 0, // 发放时间
@@ -221,7 +215,6 @@
           },
           "json"
         ).then(res => {
-          // console.log(res);
           this.tableData = res.data.records;
           this.total = res.data.total;
           this.loading = false;
@@ -245,6 +238,11 @@
         // });
         // console.log(e)
         this.user_data = e
+        if (typeof(e.ADDITIONAL_MONEY) === "undefined") {
+          this.user_data.totalMoney = e.SUBSIDY_DURATION * e.STANDARD_AMOUNT
+        } else {
+          this.user_data.totalMoney = e.SUBSIDY_DURATION * e.STANDARD_AMOUNT + (e.ADDITIONAL_MONEY - 0)
+        }
         this.releaseModel = true
         // this.dialogVisible = true;
       },
@@ -267,7 +265,7 @@
         })
         return `${armsStr}`
       },
-      getTypeSoldier(yfType ) {
+      getTypeSoldier(yfType) {
         let yfTypeStr = ``
         if (!this.dict.yfType) return;
         this.dict.yfType.filter(f => {
@@ -285,13 +283,13 @@
             eduStr = f.label
           }
         })
-        return  `${eduStr}`
+        return `${eduStr}`
       },
-      getBankType(backType) {
+      getBankType(bankType) {
         let str = ``
         if (!this.dict.bank) return;
         this.dict.bank.filter(f => {
-          if (backType === f.value) {
+          if (bankType === f.value) {
             str = f.label
           }
         })

@@ -243,10 +243,10 @@
             :isRemove="false"
           ></upload-file>
           <upload-file
-            bgc="人物照片"
-            info="点击拍摄办理人照片"
-            title="上传办理人照片"
-            :data="transactorPhotoId"
+            bgc="银行卡"
+            info="点击拍摄银行卡"
+            title="上传银行卡照片"
+            :data="receiptorBankPhotoId"
             :isRemove="false"
           ></upload-file>
           <upload-file
@@ -264,10 +264,10 @@
             :isRemove="false"
           ></upload-file>
           <upload-file
-            bgc="银行卡"
-            info="点击拍摄银行卡"
-            title="上传银行卡照片"
-            :data="receiptorBankPhotoId"
+            bgc="人物照片"
+            info="点击拍摄办理人照片"
+            title="上传办理人照片"
+            :data="transactorPhotoId"
             :isRemove="false"
           ></upload-file>
         </div>
@@ -570,9 +570,9 @@ export default {
         case 3:
           str = "未通过";
           break;
-        case 7:
-          str = "已停发";
-          break;
+        // case 7:
+        //   str = "已停发";
+        //   break;
         // case 4:
         //   str = "已通过";
         //   break;

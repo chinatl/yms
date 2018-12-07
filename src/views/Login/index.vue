@@ -53,10 +53,10 @@ export default {
   data() {
     const validateUserName = (rule, value, callback) => {
       if (!value) {
-        callback(new Error("请输入用户名"));
+        callback(new Error("请输入手机号码"));
       } else {
         if (!validatePhone(value)) {
-          callback(new Error("用户名不合法"));
+          callback(new Error("手机号码不合法"));
         } else {
           callback();
         }

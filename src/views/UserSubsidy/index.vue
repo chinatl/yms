@@ -100,7 +100,7 @@ export default {
           str = "未通过";
           break;
         case 4:
-          str = "已通过";
+          str = "未发放";
           break;
         case 5:
           str = "待发放";
