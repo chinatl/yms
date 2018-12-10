@@ -1,200 +1,342 @@
 <template>
-    <div>
-         <div class="box-item" v-if="listShow">
-            <t-title>我的申报</t-title>
-            <div class="table-content ">
-                <el-table :data="tableData" stripe style="width: 100%" v-loading="loading">
-                    <el-table-column prop="csmanName" align='center' label="义务兵姓名"></el-table-column>
-                    <el-table-column prop="receiptorName" align='center' label="领取人姓名"></el-table-column>
-                    <el-table-column prop="receiptorIdcard" align='center' label="领取人身份证"></el-table-column>
-                    <el-table-column prop="receiptorPhone" align='center' label="联系电话"></el-table-column>
-                    <el-table-column prop="status" align='center' label="申报状态">
-                        <template slot-scope="scope">
-                            <span :style="{
-                                color: ![4,5].includes(scope.row.status) ? 'red':'green'
-                            }">{{getApplyStatus(scope.row.status)}} </span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="auditReason" align='center' label="申报意见"></el-table-column>
-                    <el-table-column               align='center' label="操作">
-                        <template slot-scope="scope">
-                            <el-button
-                                size="mini"
-                                type="warning"
-                                @click="handleEdit(scope.row)"   v-if='scope.row.status === 3'>
-                                编辑
-                            </el-button>
-                            <el-button
-                                size="mini"
-                                type="primary"
-                                @click="handleDelete(scope.row)"  v-else>
-                                查看
-                            </el-button>
-                        </template>
-                    </el-table-column>
-                </el-table>
-            </div>
-             <div class="common-page">
-                <el-pagination
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              :current-page="pageNo"
-              :page-sizes="$store.getters.page_list"
-              :page-size="pageSize"
-              layout="total, sizes, prev, pager, next, jumper"
-              background
-              :total="total">
-              </el-pagination>
-              </div>
-        </div>
-        <div v-else>
-        <div class="box-item">
-            <t-title class="userInfoTitle">义务兵信息<span @click="backList">返回</span></t-title>
-            <div class="box-item-form">
-                <el-form :inline="true" :model="formInline" label-width="160px" :rules="formInlineRules" ref="formInline">
-                    <el-form-item label="义务兵姓名：" prop="csmanName">
-                        <el-input v-model.trim="formInline.csmanName" placeholder="请输入义务兵姓名" size="medium" maxlength="20" :readonly="true"></el-input>
-                    </el-form-item>
-                    <el-form-item label="义务兵身份证：" prop="csmanIdcard">
-                        <el-input v-model.trim="formInline.csmanIdcard" placeholder="请输入义务兵身份证" size="medium" maxlength="18" :readonly="true"></el-input>
-                    </el-form-item>
-                    <el-form-item label="义务兵通知书号：" prop="csmanNoticeNo">
-                        <el-input v-model.trim="formInline.csmanNoticeNo" placeholder="请输入义务兵通知书号" size="medium" maxlength="20" :readonly="true"></el-input>
-                    </el-form-item>
-                    <el-form-item label="义务兵所在学校："  prop="csmanSchool">
-                        <el-input v-model.trim="formInline.csmanSchool" placeholder="请输入义务兵所在学校" size="medium" maxlength="20" :readonly="true"></el-input>
-                    </el-form-item>
-                    <el-form-item label="义务兵学历：" prop="csmanEducation">
-                        <el-select v-model="formInline.csmanEducation" placeholder="请选择义务兵学历" size="medium"  @change="select_city_options" style="width:202px">
-                            <el-option v-for="item in dict_edu" :key="item.value" :label="item.label" :value="item.value" :disabled="true">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="义务兵所在归属地：" prop="province">
-                        <el-select v-model="formInline.province" filterable placeholder="请选择省份" size="medium"  @change="select_city_options" style="width:202px">
-                            <el-option v-for="item in province_options" :key="item.value" :label="item.label" :value="item.value" :disabled="true">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item prop="city" ref="city">
-                        <el-select v-model="formInline.city" filterable placeholder="请选择地区" size="medium" @change="select_county_options" style="width:202px">
-                            <el-option v-for="item in city_options" :key="item.value" :label="item.label" :value="item.value" :disabled="true">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item prop="county" ref="county">
-                        <el-select v-model="formInline.county" filterable placeholder="请选择市县" size="medium" @change="select_address" style="width:202px">
-                            <el-option v-for="item in county_options" :key="item.value" :label="item.label" :value="item.value" :disabled="true">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>                  
-                    <el-form-item prop="addressDetail" ref="addressDetail">
-                        <el-input v-model.trim="formInline.addressDetail" placeholder="请输入更详细的街道地址" size="medium" maxlength="50" :readonly="true"></el-input>
-                    </el-form-item>                  
-                </el-form>
-            </div>
-        </div>
-        <div class="box-item">
-            <t-title>领取人信息</t-title>
-            <div class="box-item-form">
-                <el-form :inline="true" :model="user_form"  label-width="160px" :rules="user_form_rules" ref="user_form">
-                    <el-form-item label="领取人姓名：" prop="receiptorName">
-                        <el-input v-model.trim="user_form.receiptorName" placeholder="请输入领取人姓名" size="medium" maxlength="20" :readonly="true"></el-input>
-                    </el-form-item>
-                    <el-form-item label="领取人身份证：" prop="receiptorIdcard">
-                        <el-input v-model.trim="user_form.receiptorIdcard" placeholder="请输入领取人身份证" size="medium" maxlength="18" :readonly="true"></el-input>
-                    </el-form-item>
-                    <el-form-item label="联系电话：" prop="receiptorPhone">
-                        <el-input v-model.trim="user_form.receiptorPhone" placeholder="请输入联系电话" size="medium" maxlength="20" :readonly="true" ></el-input>
-                    </el-form-item>
-                    <el-form-item label="银行卡号：" prop="account">
-                        <el-input v-model.number.trim="user_form.account" placeholder="请输入银行卡号" size="medium" maxlength="20" :readonly="true"></el-input>
-                    </el-form-item>
-                </el-form>
-            </div>
-        </div>
-        <div class="box-item">
-            <t-title>附件资料</t-title>
-            <div class="box-item-form">
-                <upload-file bgc='身份证正'  info='点击拍摄身份证正面' title="上传身份证正面照片" :data='idcardFrontPhotoId' :isRemove=false></upload-file> 
-                <upload-file bgc='身份证反'  info='点击拍摄身份证反面' title="上传身份证反面照片" :data='idcardBackPhotoId' :isRemove=false></upload-file> 
-                <upload-file bgc='人物照片'  info='点击拍摄办理人照片' title="上传办理人照片"     :data='transactorPhotoId' :isRemove=false></upload-file> 
-                <upload-file bgc='通知书例'  info='点击拍摄义务兵入伍通知书' title="上传义务兵入伍通知书照片" :data='csmanNoticePhotoId' :isRemove=false></upload-file> 
-                <upload-file bgc='人物照片'  info='点击拍摄义务兵户口本' title="上传义务兵户口本照片" :data='csmanHukouPhotoId' :isRemove=false ></upload-file>
-            </div>
-        </div>
+  <div>
+    <div class="box-item" v-if="listShow">
+      <t-title>我的申报</t-title>
+      <div class="table-content">
+        <el-table :data="tableData" stripe style="width: 100%" v-loading="loading">
+          <el-table-column prop="csmanName" align="center" label="义务兵姓名"></el-table-column>
+          <el-table-column prop="receiptorName" align="center" label="领取人姓名"></el-table-column>
+          <el-table-column prop="receiptorIdcard" align="center" label="领取人身份证"></el-table-column>
+          <el-table-column prop="receiptorPhone" align="center" label="联系电话"></el-table-column>
+          <el-table-column prop="status" align="center" label="申报状态">
+            <template slot-scope="scope">
+              <span
+                :style="{
+                                color: [3,7].includes(scope.row.status) ? 'red':'green'
+                            }"
+              >{{getApplyStatus(scope.row.status)}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="auditReason" align="center" label="申报意见"></el-table-column>
+          <el-table-column align="center" label="操作">
+            <template slot-scope="scope">
+              <el-button
+                size="mini"
+                type="warning"
+                @click="handleEdit(scope.row)"
+                v-if="scope.row.status === 3"
+              >编辑</el-button>
+              <el-button size="mini" type="primary" @click="handleDelete(scope.row)" v-else>查看</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+      <div class="common-page">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="pageNo"
+          :page-sizes="$store.getters.page_list"
+          :page-size="pageSize"
+          layout="total, sizes, prev, pager, next, jumper"
+          background
+          :total="total"
+        ></el-pagination>
+      </div>
     </div>
-        <el-dialog
-            class="common-dialog"
-            title="发放详情"
-            :visible.sync="dialogVisible">
-            <div class="user-info">
-                <p>
-                    <span>义务兵姓名：</span>
-                    <span>黄宗泽</span>
-                </p>
-                <p>
-                    <span>领取人姓名：</span>
-                    <span>黄宗泽</span>
-                </p>
-                <p>
-                    <span>领取人身份证：</span>
-                    <span>{{user_data.receiptorIdcard}}</span>
-                </p>
-                <p>
-                    <span>联系电话：</span>
-                    <span>黄宗泽</span>
-                </p>
-                <p>
-                    <span>补助类别：</span>
-                    <span class="red">黄宗泽</span>
-                </p>
-                <p>
-                    <span>补助账号：</span>
-                    <span>1257824258411</span>
-                </p>
-                <p>
-                    <span>补助时长：</span>
-                    <span class="red">黄宗泽</span>
-                </p>
-                <p>
-                    <span>补助标准：</span>
-                    <span class="red">黄宗泽</span>
-                </p>
-                <p>
-                    <span>增发金额：</span>
-                    <span class="red">黄宗泽</span>
-                </p>
-                <p>
-                    <span>补助总额：</span>
-                    <span class="red">黄宗泽</span>
-                </p>
-                <p>
-                    <span>发放机构：</span>
-                    <span class="red">黄宗泽</span>
-                </p>
-                <p>
-                    <span>发放时间：</span>
-                    <span class="red">黄宗泽</span>
-                </p>
-            </div>
-            <p style="text-align:right;margin: 20px 0 10px">
-                <el-button type="primary" size="small" @click="dialogVisible = false">确定</el-button>
-            </p>
-        </el-dialog>
-           <el-dialog
-            class="common-dialog"
-            title="申报详情"
-            :visible.sync="notApplyData">
-            <div class="user-info">
-                <p>当前暂无任何申报,是否立即申报？
-                </p>
-            </div>
-            <p style="text-align:right;margin: 20px 0 10px">
-                <el-button type="primary" size="small" @click="handleToApply">确定</el-button>
-            </p>
-        </el-dialog>
+    <div v-else>
+      <div class="box-item">
+        <t-title class="userInfoTitle">义务兵信息
+          <span @click="backList">返回</span>
+        </t-title>
+        <div class="box-item-form">
+          <el-form
+            :inline="true"
+            :model="formInline"
+            label-width="160px"
+            :rules="formInlineRules"
+            ref="formInline"
+          >
+            <el-form-item label="义务兵姓名：" prop="csmanName">
+              <el-input
+                v-model.trim="formInline.csmanName"
+                placeholder="请输入义务兵姓名"
+                size="medium"
+                maxlength="20"
+                :readonly="true"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="义务兵身份证：" prop="csmanIdcard">
+              <el-input
+                v-model.trim="formInline.csmanIdcard"
+                placeholder="请输入义务兵身份证"
+                size="medium"
+                maxlength="18"
+                :readonly="true"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="义务兵通知书号：" prop="csmanNoticeNo">
+              <el-input
+                v-model.trim="formInline.csmanNoticeNo"
+                placeholder="请输入义务兵通知书号"
+                size="medium"
+                maxlength="20"
+                :readonly="true"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="义务兵所在学校：" prop="csmanSchool">
+              <el-input
+                v-model.trim="formInline.csmanSchool"
+                placeholder="请输入义务兵所在学校"
+                size="medium"
+                maxlength="20"
+                :readonly="true"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="义务兵学历：" prop="csmanEducation">
+              <el-select
+                v-model="formInline.csmanEducation"
+                placeholder="请选择义务兵学历"
+                size="medium"
+                @change="select_city_options"
+                :disabled="true"
+                style="width:202px"
+              >
+                <el-option
+                  v-for="item in dict_edu"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="义务兵所在归属地：" prop="province">
+              <el-select
+                v-model="formInline.province"
+                filterable
+                placeholder="请选择省份"
+                size="medium"
+                @change="select_city_options"
+                :disabled="true"
+                style="width:202px"
+              >
+                <el-option
+                  v-for="item in province_options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item prop="city" ref="city">
+              <el-select
+                v-model="formInline.city"
+                filterable
+                placeholder="请选择地区"
+                size="medium"
+                :disabled="true"
+                @change="select_county_options"
+                style="width:202px"
+              >
+                <el-option
+                  v-for="item in city_options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item prop="county" ref="county">
+              <el-select
+                v-model="formInline.county"
+                filterable
+                placeholder="请选择市县"
+                size="medium"
+                @change="select_address"
+                :disabled="true"
+                style="width:202px"
+              >
+                <el-option
+                  v-for="item in county_options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item prop="addressDetail" ref="addressDetail">
+              <el-input
+                v-model.trim="formInline.addressDetail"
+                placeholder="请输入更详细的街道地址"
+                size="medium"
+                maxlength="50"
+                :readonly="true"
+              ></el-input>
+            </el-form-item>
+          </el-form>
+        </div>
+      </div>
+      <div class="box-item">
+        <t-title>领取人信息</t-title>
+        <div class="box-item-form">
+          <el-form
+            :inline="true"
+            :model="user_form"
+            label-width="160px"
+            :rules="user_form_rules"
+            ref="user_form"
+          >
+            <el-form-item label="领取人姓名：" prop="receiptorName">
+              <el-input
+                v-model.trim="user_form.receiptorName"
+                placeholder="请输入领取人姓名"
+                size="medium"
+                maxlength="20"
+                :readonly="true"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="领取人身份证：" prop="receiptorIdcard">
+              <el-input
+                v-model.trim="user_form.receiptorIdcard"
+                placeholder="请输入领取人身份证"
+                size="medium"
+                maxlength="18"
+                :readonly="true"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="联系电话：" prop="receiptorPhone">
+              <el-input
+                v-model.trim="user_form.receiptorPhone"
+                placeholder="请输入联系电话"
+                size="medium"
+                maxlength="20"
+                :readonly="true"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="银行卡号：" prop="account">
+              <el-input
+                v-model.number.trim="user_form.account"
+                placeholder="请输入银行卡号"
+                size="medium"
+                maxlength="20"
+                :readonly="true"
+              ></el-input>
+            </el-form-item>
+          </el-form>
+        </div>
+      </div>
+      <div class="box-item">
+        <t-title>附件资料</t-title>
+        <div class="box-item-form">
+          <upload-file
+            bgc="身份证正"
+            info="点击拍摄身份证正面"
+            title="上传身份证正面照片"
+            :data="idcardFrontPhotoId"
+            :isRemove="false"
+          ></upload-file>
+          <upload-file
+            bgc="身份证反"
+            info="点击拍摄身份证反面"
+            title="上传身份证反面照片"
+            :data="idcardBackPhotoId"
+            :isRemove="false"
+          ></upload-file>
+          <upload-file
+            bgc="银行卡"
+            info="点击拍摄银行卡"
+            title="上传银行卡照片"
+            :data="receiptorBankPhotoId"
+            :isRemove="false"
+          ></upload-file>
+          <upload-file
+            bgc="通知书例"
+            info="点击拍摄义务兵入伍通知书"
+            title="上传义务兵入伍通知书照片"
+            :data="csmanNoticePhotoId"
+            :isRemove="false"
+          ></upload-file>
+          <upload-file
+            bgc="人物照片"
+            info="点击拍摄义务兵户口本"
+            title="上传义务兵户口本照片"
+            :data="csmanHukouPhotoId"
+            :isRemove="false"
+          ></upload-file>
+          <upload-file
+            bgc="人物照片"
+            info="点击拍摄办理人照片"
+            title="上传办理人照片"
+            :data="transactorPhotoId"
+            :isRemove="false"
+          ></upload-file>
+        </div>
+      </div>
     </div>
+    <el-dialog class="common-dialog" title="发放详情" :visible.sync="dialogVisible">
+      <div class="user-info">
+        <p>
+          <span>义务兵姓名：</span>
+          <span>黄宗泽</span>
+        </p>
+        <p>
+          <span>领取人姓名：</span>
+          <span>黄宗泽</span>
+        </p>
+        <p>
+          <span>领取人身份证：</span>
+          <span>{{user_data.receiptorIdcard}}</span>
+        </p>
+        <p>
+          <span>联系电话：</span>
+          <span>黄宗泽</span>
+        </p>
+        <p>
+          <span>补助类别：</span>
+          <span class="red">黄宗泽</span>
+        </p>
+        <p>
+          <span>补助账号：</span>
+          <span>1257824258411</span>
+        </p>
+        <p>
+          <span>补助时长：</span>
+          <span class="red">黄宗泽</span>
+        </p>
+        <p>
+          <span>补助标准：</span>
+          <span class="red">黄宗泽</span>
+        </p>
+        <p>
+          <span>增发金额：</span>
+          <span class="red">黄宗泽</span>
+        </p>
+        <p>
+          <span>补助总额：</span>
+          <span class="red">黄宗泽</span>
+        </p>
+        <p>
+          <span>发放机构：</span>
+          <span class="red">黄宗泽</span>
+        </p>
+        <p>
+          <span>发放时间：</span>
+          <span class="red">黄宗泽</span>
+        </p>
+      </div>
+      <p style="text-align:right;margin: 20px 0 10px">
+        <el-button type="primary" size="small" @click="dialogVisible = false">确定</el-button>
+      </p>
+    </el-dialog>
+    <el-dialog class="common-dialog" title="申报详情" :visible.sync="notApplyData">
+      <div class="user-info">
+        <p>当前暂无任何申报,是否立即申报？</p>
+      </div>
+      <p style="text-align:right;margin: 20px 0 10px">
+        <el-button type="primary" size="small" @click="handleToApply">确定</el-button>
+      </p>
+    </el-dialog>
+  </div>
 </template>
 
 <script>
@@ -389,6 +531,10 @@ export default {
         src: "",
         id: ""
       },
+      receiptorBankPhotoId: {
+        src: "",
+        id: ""
+      },
       id: ``,
       userId: ``
     };
@@ -398,7 +544,7 @@ export default {
   },
   async created() {
     await this.init(this.pageSize, this.pageNo);
-     var list = region["100000"];
+    var list = region["100000"];
     for (let key in list) {
       this.province_options.push({
         value: key,
@@ -424,13 +570,17 @@ export default {
         case 3:
           str = "未通过";
           break;
-        case 4:
-          str = "已通过";
-          break;
-        case 5:
-          str = "已通过";
-          break;
+        // case 7:
+        //   str = "已停发";
+        //   break;
+        // case 4:
+        //   str = "已通过";
+        //   break;
+        // case 5:
+        //   str = "已通过";
+        //   break;
         default:
+          str = "已通过"
           break;
       }
       return str;
@@ -439,7 +589,7 @@ export default {
       this.$router.push("/SubsidyDeclaration/index");
     },
     handleDelete(e) {
-      this.getUserApplyInfo(e.csmanNoticeNo)
+      this.getUserApplyInfo(e.csmanNoticeNo);
       this.listShow = false;
       // this.dialogVisible = true;
     },
@@ -511,7 +661,6 @@ export default {
             "/" +
             `${data.idcardFrontPhoto.smallImgName}`;
           this.idcardFrontPhotoId.src = this.idcardFrontPhotoId.src;
-          console.log(this.idcardFrontPhotoId.src);
           this.idcardBackPhotoId.id =
             data.idcardBackPhoto && data.idcardBackPhoto.fileId;
           this.idcardBackPhotoId.src =
@@ -540,9 +689,15 @@ export default {
             `${data.csmanHukouPhoto.attaPath}` +
             "/" +
             `${data.csmanHukouPhoto.smallImgName}`;
+          this.receiptorBankPhotoId.id =
+            data.receiptorBankPhoto && data.receiptorBankPhoto.fileId;
+          this.receiptorBankPhotoId.src =
+            "/" +
+            `${data.receiptorBankPhoto.attaPath}` +
+            "/" +
+            `${data.receiptorBankPhoto.smallImgName}`;
           this.userId = data.userId;
           this.id = data.id;
-          console.log(this.idcardFrontPhotoId);
         })
         .catch(res => {
           console.log(res);

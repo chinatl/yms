@@ -6,7 +6,7 @@
               <img :src="require('@/assets/img/背景1.png')" alt="" class="layout-user-bgc">
               <el-dropdown  @command='has_command'>
                 <span class="el-dropdown-link" style="cursor:pointer">
-                    {{user_info.realName}}<i class="el-icon-arrow-down el-icon--right"></i>
+                    {{userInfo.realName}}<i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
                     <!-- <el-dropdown-item command="user">个人中心</el-dropdown-item> -->
@@ -30,14 +30,15 @@
     </div>
 </template>
 <script>
+  import {mapGetters} from "vuex";
 export default {
   components: {},
   name: "layout",
 
   data() {
     return {
-      user_info: {
-        realName: "张三"
+      userInfo: {
+        realName: ""
       },
       note: {
         backgroundImage: "url(" + require("@/assets/img/背景2.png") + ")"
@@ -67,7 +68,11 @@ export default {
       return this.$route.name !== undefined
         ? this.$route.name + +new Date()
         : this.$route + +new Date();
-    }
+    },
+    ...mapGetters([`user_info`])
+  },
+  created() {
+    this.userInfo.realName = this.user_info.phone
   },
   methods: {
     get_current(item) {

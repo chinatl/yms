@@ -4,11 +4,20 @@
       <t-title>我的补助</t-title>
       <div class="table-content">
         <el-table :data="tableData" stripe style="width: 100%" v-loading="loading">
-          <el-table-column prop="csmanName" align="center" label="义务兵姓名"></el-table-column>
-          <el-table-column prop="receiptorName" align="center" label="领取人姓名"></el-table-column>
-          <el-table-column prop="receiptorIdcard" align="center" label="领取人身份证"></el-table-column>
+          <el-table-column prop="csmanName" align="center" label="义务兵"></el-table-column>
+          <el-table-column prop="receiptorName" align="center" label="领取人"></el-table-column>
           <el-table-column prop="receiptorPhone" align="center" label="联系电话"></el-table-column>
-          <el-table-column prop="status" align="center" label="申报状态">
+          <el-table-column prop="account" align="center" label="补助账号"></el-table-column>
+          <el-table-column prop="armsType" align="center" label="优抚类别">
+            <template slot-scope="scope">
+              {{getYfType(scope.row.armsType)}}
+            </template>
+          </el-table-column>
+          <el-table-column prop="standardAmount" align="center" label="补助标准"></el-table-column>
+          <el-table-column prop="subsidyDuration" align="center" label="补助时长(月)"></el-table-column>
+          <el-table-column prop="plateauSubsidy" align="center" label="高原兵补助(元)"></el-table-column>
+          <el-table-column prop="subsidyMoney" align="center" label="补助总额(元)"></el-table-column>
+          <el-table-column prop="status" align="center" label="补助状态">
             <template slot-scope="scope">
               <span
                 :style="{
@@ -17,16 +26,6 @@
               >{{getApplyStatus(scope.row.status)}}</span>
             </template>
           </el-table-column>
-          <!-- <el-table-column               align='center' label="操作">
-                        <template slot-scope="scope">
-                            <el-button
-                                size="mini"
-                                type="primary"
-                                @click="handleDelete(scope.row)">
-                                查看
-                            </el-button>
-                        </template>
-          </el-table-column>-->
         </el-table>
       </div>
       <div class="common-page">
@@ -42,63 +41,6 @@
         ></el-pagination>
       </div>
     </div>
-    <el-dialog class="common-dialog" title="发放详情" :visible.sync="dialogVisible">
-      <div class="user-info">
-        <p>
-          <span>义务兵姓名：</span>
-          <span>{{user_data.csmanName}}</span>
-        </p>
-        <p>
-          <span>领取人姓名：</span>
-          <span>{{user_data.receiptorName}}</span>
-        </p>
-        <p>
-          <span>领取人身份证：</span>
-          <span>{{user_data.receiptorIdcard}}</span>
-        </p>
-        <p>
-          <span>联系电话：</span>
-          <span>{{user_data.receiptorPhone}}</span>
-        </p>
-        <p>
-          <span>补助类别：</span>
-          <span
-            class="red"
-          >{{getType(user_data.preferentialTreatmentType,user_data.csmanEducation,user_data.armsType)}}</span>
-        </p>
-        <p>
-          <span>补助账号：</span>
-          <span>{{user_data.account}}</span>
-        </p>
-        <p>
-          <span>补助时长：</span>
-          <span class="red">{{user_data.subsidyDuration}}</span>
-        </p>
-        <!-- <p>
-          <span>补助标准：</span>
-          <span class="red">{{user_data.standardAmount}}</span>
-        </p> -->
-        <!-- <p>
-          <span>增发金额：</span>
-          <span class="red">{{user_data.increaseMoney}}</span>
-        </p> -->
-        <p>
-          <span>补助总额：</span>
-          <span class="red">{{user_data.subsidyMoney}}</span>
-        </p>
-        <!-- <p>
-          <span>发放机构：</span>
-          <span class="red">{{getBankType(user_data.GRANT_ORG)}}</span>
-        </p>
-        <p>
-          <span>发放时间：</span>
-          <span class="red">{{user_data.GRANT_TIME}}</span>
-        </p> -->
-      </div>
-      <p style="text-align:right;margin: 20px 0 10px">
-        <el-button type="primary" size="small" @click="dialogVisible = false">确定</el-button>
-      </p>
-    </el-dialog>
   </div>
 </template>
 
@@ -145,7 +87,7 @@ export default {
   },
   methods: {
     /**
-     * params ==>  status  1 待提交,2待审核,3未通过,4已通过,5待发放,6,发放中,7已停发
+     * params ==>  status  1 待提交,2待审核,3未通过,4已通过,5待发放,6,已发放,7已停发
      * 在这里只需要取 2， 3 ，4 的状态
      */
     getApplyStatus(status) {
@@ -158,13 +100,13 @@ export default {
           str = "未通过";
           break;
         case 4:
-          str = "已通过";
+          str = "未发放";
           break;
         case 5:
           str = "待发放";
           break;
         case 6:
-          str = "发放中";
+          str = "已发放";
           break;
         case 7:
           str = "已停发";
@@ -174,13 +116,9 @@ export default {
       }
       return str;
     },
-    handleDelete(e) {
-      this.user_data = e;
-      this.dialogVisible = true;
-    },
     init(pageSize, pageNo) {
       this.loading = true;
-      this.$post(`yfcsman/yfCsmanList/${this.user_info.phone}`, {
+      this.$post(`yfcsman/getYFCsmanDetail/${this.user_info.phone}`, {
         current: pageNo, //当前页
         size: pageSize
       })
@@ -202,6 +140,16 @@ export default {
     handleCurrentChange(e) {
       this.pageNo = e;
       this.init(this.pageSize, e);
+    },
+    getYfType(armsType) {
+      let armsStr = ``
+      if (!this.dict.armsType) return;
+      this.dict.armsType.filter(f => {
+        if (armsType === f.value) {
+          armsStr = f.label
+        }
+      })
+      return `${armsStr}`
     },
     getType(yfType, education, armsType) {
       let yfTypeStr = ``;

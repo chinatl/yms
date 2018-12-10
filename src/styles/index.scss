@@ -33,6 +33,31 @@ body {
     }
   }
 }
+.el-input.is-disabled .el-input__inner {
+  background-color: #fff;
+  border-color: #e4e7ed;
+  //border: none;
+  color: #000 !important;
+  cursor: not-allowed;
+}
+
+.el-radio__input.is-disabled + span.el-radio__label {
+  color: #000 !important;
+  border-color: #e4e7ed;
+}
+
+.el-textarea.is-disabled .el-textarea__inner {
+  background-color: rgba(168, 158, 158, 0.1);
+  border: none;
+  border-color: #e4e7ed;
+  color: #000 !important;
+  cursor: not-allowed;
+}
+
+.el-radio__input.is-disabled.is-checked .el-radio__inner::after {
+  background-color: #000;
+}
+
 //弹窗样式
 .common-dialog {
   &.edu {
