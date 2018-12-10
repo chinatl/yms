@@ -215,7 +215,7 @@
             </el-form-item>
             <el-form-item label="银行卡号：" prop="account">
               <el-input
-                v-model.number.trim="user_form.account"
+                v-model.trim="user_form.account"
                 placeholder="请输入银行卡号"
                 size="medium"
                 maxlength="20"
@@ -231,14 +231,14 @@
           <upload-file
             bgc="身份证正"
             info="点击拍摄身份证正面"
-            title="上传身份证正面照片"
+            title="上传领取人身份证正面照片"
             :data="idcardFrontPhotoId"
             :isRemove="false"
           ></upload-file>
           <upload-file
             bgc="身份证反"
             info="点击拍摄身份证反面"
-            title="上传身份证反面照片"
+            title="上传领取人身份证反面照片"
             :data="idcardBackPhotoId"
             :isRemove="false"
           ></upload-file>
@@ -273,61 +273,6 @@
         </div>
       </div>
     </div>
-    <el-dialog class="common-dialog" title="发放详情" :visible.sync="dialogVisible">
-      <div class="user-info">
-        <p>
-          <span>义务兵姓名：</span>
-          <span>黄宗泽</span>
-        </p>
-        <p>
-          <span>领取人姓名：</span>
-          <span>黄宗泽</span>
-        </p>
-        <p>
-          <span>领取人身份证：</span>
-          <span>{{user_data.receiptorIdcard}}</span>
-        </p>
-        <p>
-          <span>联系电话：</span>
-          <span>黄宗泽</span>
-        </p>
-        <p>
-          <span>补助类别：</span>
-          <span class="red">黄宗泽</span>
-        </p>
-        <p>
-          <span>补助账号：</span>
-          <span>1257824258411</span>
-        </p>
-        <p>
-          <span>补助时长：</span>
-          <span class="red">黄宗泽</span>
-        </p>
-        <p>
-          <span>补助标准：</span>
-          <span class="red">黄宗泽</span>
-        </p>
-        <p>
-          <span>增发金额：</span>
-          <span class="red">黄宗泽</span>
-        </p>
-        <p>
-          <span>补助总额：</span>
-          <span class="red">黄宗泽</span>
-        </p>
-        <p>
-          <span>发放机构：</span>
-          <span class="red">黄宗泽</span>
-        </p>
-        <p>
-          <span>发放时间：</span>
-          <span class="red">黄宗泽</span>
-        </p>
-      </div>
-      <p style="text-align:right;margin: 20px 0 10px">
-        <el-button type="primary" size="small" @click="dialogVisible = false">确定</el-button>
-      </p>
-    </el-dialog>
     <el-dialog class="common-dialog" title="申报详情" :visible.sync="notApplyData">
       <div class="user-info">
         <p>当前暂无任何申报,是否立即申报？</p>
@@ -494,7 +439,7 @@ export default {
         province: [{ trigger: "change", validator: checkProvince }],
         city: [{ trigger: "change", validator: checkCity }],
         county: [{ trigger: "change", validator: checkCounty }],
-        addressDetail: [{ trigger: "change", validator: checkAddressDetail }]
+        addressDetail: [{ trigger: "blur", validator: checkAddressDetail }]
       },
       user_form: {
         receiptorName: "",
@@ -508,7 +453,6 @@ export default {
         receiptorPhone: [{ trigger: "blur", validator: checkReceiptorPhone }],
         account: [
           { trigger: "blur", validator: checkAccount },
-          { type: "number", message: "银行卡号必须为数字值" }
         ]
       },
       idcardFrontPhotoId: {
@@ -668,13 +612,6 @@ export default {
             `${data.idcardBackPhoto.attaPath}` +
             "/" +
             `${data.idcardBackPhoto.smallImgName}`;
-          this.transactorPhotoId.id =
-            data.transactorPhoto && data.transactorPhoto.fileId;
-          this.transactorPhotoId.src =
-            "/" +
-            `${data.transactorPhoto.attaPath}` +
-            "/" +
-            `${data.transactorPhoto.smallImgName}`;
           this.csmanNoticePhotoId.id =
             data.csmanNoticePhoto && data.csmanNoticePhoto.fileId;
           this.csmanNoticePhotoId.src =
@@ -696,6 +633,21 @@ export default {
             `${data.receiptorBankPhoto.attaPath}` +
             "/" +
             `${data.receiptorBankPhoto.smallImgName}`;
+           let tmp = data.transactorPhoto.fileId; 
+           if (!tmp && typeof(tmp)!="undefined" && tmp!=0){ 
+              this.transactorPhotoId = {
+                src: "",
+                id: ""
+              }
+           } else {
+            this.transactorPhotoId.id =
+            data.transactorPhoto && data.transactorPhoto.fileId;
+          this.transactorPhotoId.src =
+            "/" +
+            `${data.transactorPhoto.attaPath}` +
+            "/" +
+            `${data.transactorPhoto.smallImgName}`;  
+           }
           this.userId = data.userId;
           this.id = data.id;
         })
