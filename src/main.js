@@ -23,7 +23,8 @@ import {
   Dialog,
   Option,
   pagination,
-  tooltip
+  Tooltip,
+  Popover
 } from 'element-ui';
 Vue.use(Button)
 Vue.use(FormItem)
@@ -39,7 +40,8 @@ Vue.use(Upload);
 Vue.use(Dialog);
 Vue.use(Option);
 Vue.use(pagination);
-Vue.use(tooltip);
+Vue.use(Tooltip);
+Vue.use(Popover);
 Vue.use(Loading.directive);
 Vue.prototype.$message = Message;
 Vue.filter('formatDate',function (value, fmt) {
