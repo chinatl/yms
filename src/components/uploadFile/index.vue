@@ -44,10 +44,18 @@ export default {
   },
   methods: {
     upload_img(e) {
-      if (!/\.(png|jpg|jpeg|PNG|JPG|JPEG?g)(\?.*)?$/.test(e.name)) {
+      console.log(e)
+      if (!/\.(png|jpg|jpeg|PNG|JPEG|JPG)(\?.*)?$/.test(e.name)) {
         this.$message({
           message: "请上传jpg,png,jpeg等图片格式文件",
           type: "warning"
+        });
+        return;
+      }
+      if (e.size / 1024 / 1024 > 20) {
+        this.$message({
+          message: "最大可上传20M图片",
+          type: "error"
         });
         return;
       }

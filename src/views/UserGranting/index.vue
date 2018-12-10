@@ -238,11 +238,12 @@
         // });
         // console.log(e)
         this.user_data = e
-        if (typeof(e.ADDITIONAL_MONEY) === "undefined") {
+        if (typeof(e.PLATEAU_SUBSIDY) === "undefined") {
           this.user_data.totalMoney = e.SUBSIDY_DURATION * e.STANDARD_AMOUNT
         } else {
-          this.user_data.totalMoney = e.SUBSIDY_DURATION * e.STANDARD_AMOUNT + (e.ADDITIONAL_MONEY - 0)
+          this.user_data.totalMoney = e.SUBSIDY_DURATION * e.STANDARD_AMOUNT + (e.PLATEAU_SUBSIDY - 0)
         }
+        this.user_data.SUBSIDY_MONEY = e.GRANT_DURATION * e.STANDARD_AMOUNT + e.ADDITIONAL_MONEY
         this.releaseModel = true
         // this.dialogVisible = true;
       },

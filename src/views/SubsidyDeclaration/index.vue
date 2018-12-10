@@ -14,11 +14,11 @@
           </el-form-item>
           <el-form-item label="义务兵通知书号：" prop="csmanNoticeNo">
             <el-input v-model.trim="formInline.csmanNoticeNo" placeholder="请输入义务兵通知书号" size="medium"
-                      maxlength="30"></el-input>
+                      maxlength="20"></el-input>
           </el-form-item>
           <el-form-item label="义务兵所在学校：" prop="csmanSchool">
             <el-input v-model.trim="formInline.csmanSchool" placeholder="请输入义务兵所在学校" size="medium"
-                      maxlength="30"></el-input>
+                      maxlength="20"></el-input>
           </el-form-item>
           <el-form-item label="义务兵学历：" prop="csmanEducation">
             <el-select v-model="formInline.csmanEducation" placeholder="请选择义务兵学历" size="medium"
@@ -248,7 +248,7 @@
           province: [{trigger: "change", validator: checkProvince}],
           city: [{trigger: "change", validator: checkCity}],
           county: [{trigger: "change", validator: checkCounty}],
-          addressDetail: [{trigger: "change", validator: checkAddressDetail}]
+          addressDetail: [{trigger: "blur", validator: checkAddressDetail}]
         },
         user_form: {
           receiptorName: "",
@@ -261,7 +261,7 @@
           receiptorIdcard: [{trigger: "blur", validator: checkReceiptorIdcard}],
           receiptorPhone: [{trigger: "blur", validator: checkReceiptorPhone}],
           account: [
-            {trigger: "change", validator: checkAccount},
+            {trigger: "blur", validator: checkAccount},
           ]
         },
         idcardFrontPhotoId: {
