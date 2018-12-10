@@ -26,11 +26,12 @@
               >{{getApplyStatus(scope.row.status)}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="stopReason" align="center" label="备注">
+          <el-table-column prop="stopReason" align="center" label="备注" width="120">
             <template slot-scope="scope">
-              <el-tooltip  effect="dark" :content="scope.row.stopReason" placement="top-start">
-                   <p class="textwrap">{{scope.row.stopReason | stringFun}}</p>
-              </el-tooltip>
+              <el-popover  placement="left" trigger="hover" width="240">
+                  <p class="textwrap">{{scope.row.stopReason}}</p>
+                  <p slot="reference">{{scope.row.stopReason | stringFun}}</p>
+              </el-popover>
             </template> 
           </el-table-column>
         </el-table>
