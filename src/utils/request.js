@@ -34,8 +34,10 @@ service.interceptors.response.use(
     const res = response.data;
     if (res.code === 0) {
       return response.data
-    }
-    else {
+    } else {
+      if(res.code === 403) {
+        router.push('/login')
+      }  
       Message({
         message: res.msg || res.message,
         type: 'error',

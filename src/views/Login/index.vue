@@ -42,7 +42,7 @@
             </div>
         </div>
         <div class="login-content-bottom">
-           <p>© 2017-2020 电子政务办 & 神航星云 联合出品</p>
+           <!-- <p>© 2017-2020 电子政务办 & 神航星云 联合出品</p> -->
         </div>
     </div>
 </template>

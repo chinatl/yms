@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import store from '../store'
 Vue.use(Router)
 import Layout from '../views/layout/index'
-export default new Router({
-  mode: 'history',
-  routes: [
+
+ let baseRoute = [
     { path: '/', redirect: '/login', component: () => import('@/views/login/index'), name: '登录' },
     { path: '/login', component: () => import('@/views/login/index') },
     {
@@ -56,4 +56,25 @@ export default new Router({
       ]
     }
   ]
+let router = new Router({
+  mode: 'history',
+  routes: baseRoute
+});
+
+router.beforeEach((to,from,next) => {
+  // 对路由进行验证
+  console.log(to)
+  console.log(from)
+  if (to.meta&&to.meta.requiresAuth) {
+    if(store.getters.token !== ``) {
+      console.log(`tset--1`)
+      next()
+    }else{
+      console.log(`tset--2`)
+      next({path: '/login'})  
+    }
+  } else{
+    next()
+  }
 })
+export default router;

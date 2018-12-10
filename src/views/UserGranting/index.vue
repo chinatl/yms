@@ -73,7 +73,7 @@
         </p>
       </div>
       <p class="usertitle">
-        <span>发放信息</span>
+        <span>补助信息</span>
       </p>
       <div class="user-info">
         <p>
@@ -106,7 +106,12 @@
           <span class="spanTypeWidth spanWidth">{{user_data.totalMoney}}</span>
           元
         </p>
-        <p>
+      </div>
+      <p class="usertitle">
+        <span>发放信息</span>
+      </p>
+      <div class="user-info">
+         <p>
           <span>发放机构：</span>
           <span class="spanTypeWidth spanWidth">{{getBankType(user_data.GRANT_ORG)}}</span>
         </p>
