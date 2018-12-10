@@ -248,7 +248,7 @@
           province: [{trigger: "change", validator: checkProvince}],
           city: [{trigger: "change", validator: checkCity}],
           county: [{trigger: "change", validator: checkCounty}],
-          addressDetail: [{trigger: "change", validator: checkAddressDetail}]
+          addressDetail: [{trigger: "blur", validator: checkAddressDetail}]
         },
         user_form: {
           receiptorName: "",
@@ -261,7 +261,7 @@
           receiptorIdcard: [{trigger: "blur", validator: checkReceiptorIdcard}],
           receiptorPhone: [{trigger: "blur", validator: checkReceiptorPhone}],
           account: [
-            {trigger: "change", validator: checkAccount},
+            {trigger: "blur", validator: checkAccount},
           ]
         },
         idcardFrontPhotoId: {

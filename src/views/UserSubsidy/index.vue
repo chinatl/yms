@@ -27,9 +27,9 @@
             </template>
           </el-table-column>
           <el-table-column prop="stopReason" align="center" label="备注">
-            <template slot-scope="scope">
-              <el-tooltip class="item" effect="dark" :content="scope.row.stopReason" placement="top-start">
-                   <p>{{scope.row.stopReason | stringFun}}</p>
+            <template>
+              <el-tooltip effect="dark" :content="scope.row.stopReason" placement="top-start">
+                   <p class="textwrap">{{scope.row.stopReason | stringFun}}</p>
               </el-tooltip>
             </template> 
           </el-table-column>
@@ -211,5 +211,8 @@ export default {
       }
     }
   }
+}
+.textwrap {
+  white-space: pre-wrap
 }
 </style>
