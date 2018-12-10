@@ -3,6 +3,7 @@ import Router from 'vue-router'
 Vue.use(Router)
 import Layout from '../views/layout/index'
 export default new Router({
+  mode: 'history',
   routes: [
     { path: '/', redirect: '/login', component: () => import('@/views/login/index'), name: '登录' },
     { path: '/login', component: () => import('@/views/login/index') },

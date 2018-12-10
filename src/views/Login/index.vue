@@ -67,8 +67,8 @@ export default {
         backgroundImage: "url(" + require("@/assets/img/城市元素.png") + ")"
       },
       loginForm: {
-        username: "19802920205",
-        userCode: "800185"
+        username: "",
+        userCode: ""
       },
       loading: false,
       loginRules: {
@@ -155,7 +155,8 @@ export default {
               type: "success"
             });
             this.$store.commit(SET_USER_INFO, res.data);
-            this.$router.push("/SubsidyDeclaration/index");
+            this.$router.push("/UserDeclaration/index");
+            this.$store.dispatch("getEdu");
           })
           .catch(res => {
             this.loading = false;

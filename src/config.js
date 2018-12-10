@@ -1,1 +1,1 @@
-export default process.env.NODE_ENV === 'development' ? '/api/' : '/';
+export default process.env.NODE_ENV === 'development' ? '/api/' : '/api/';

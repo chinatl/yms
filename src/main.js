@@ -22,7 +22,8 @@ import {
   DropdownItem,
   Upload,
   Dialog,
-  Option
+  Option,
+  pagination
 } from 'element-ui';
 Vue.use(Button)
 Vue.use(FormItem)
@@ -37,6 +38,7 @@ Vue.use(DropdownItem);
 Vue.use(Upload);
 Vue.use(Dialog);
 Vue.use(Option);
+Vue.use(pagination);
 Vue.use(Loading.directive);
 Vue.prototype.$message = Message;
 

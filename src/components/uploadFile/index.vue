@@ -12,7 +12,7 @@
         <div class="infotroduce">{{title}}</div>
         <div class="uploading-img" v-if="data.src">
           <img :src="data.src" alt="">
-          <i class="el-icon-close" @click="remove_img"></i>
+          <i class="el-icon-close" @click="remove_img" v-show="isRemove"></i>
         </div>
     </div>
 </div>
@@ -36,6 +36,10 @@ export default {
     },
     data: {
       type: Object
+    },
+    isRemove: {
+      type: Boolean,
+      default: true
     }
   },
   methods: {
