@@ -2,13 +2,14 @@
 <div class="upload-container">
     <div class="upload-file" :style='{"background-image":"url(" + require("@/assets/img/"+ bgc +".png") + ")"}' v-loading='loading'>
         <el-upload
+          v-show="isRemove"
           action="https://jsonplaceholder.typicode.com/posts/"
           :on-change="upload_img"
           :show-file-list="false"
           :auto-upload="false">
           <img :src="require('@/assets/img/相机icon.png')" alt="" class="photo">
         </el-upload>
-        <p>{{info}}</p>
+        <p v-show="isRemove">{{info}}</p>
         <div class="infotroduce">{{title}}</div>
         <div class="uploading-img" v-if="data.src">
           <img :src="data.src" alt="">
@@ -37,6 +38,7 @@ export default {
     data: {
       type: Object
     },
+    // 传递的是  是否可以删除和上传的,默认是是可以上传和删除，
     isRemove: {
       type: Boolean,
       default: true
@@ -44,7 +46,6 @@ export default {
   },
   methods: {
     upload_img(e) {
-      console.log(e)
       if (!/\.(png|jpg|jpeg|PNG|JPEG|JPG)(\?.*)?$/.test(e.name)) {
         this.$message({
           message: "请上传jpg,png,jpeg等图片格式文件",

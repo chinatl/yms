@@ -218,7 +218,6 @@
             current: pageNo, //当前页
             size: pageSize
           },
-          "json"
         ).then(res => {
           this.tableData = res.data.records;
           this.total = res.data.total;

@@ -63,14 +63,10 @@ let router = new Router({
 
 router.beforeEach((to,from,next) => {
   // 对路由进行验证
-  console.log(to)
-  console.log(from)
   if (to.meta&&to.meta.requiresAuth) {
     if(store.getters.token !== ``) {
-      console.log(`tset--1`)
       next()
     }else{
-      console.log(`tset--2`)
       next({path: '/login'})  
     }
   } else{

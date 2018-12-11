@@ -13,6 +13,7 @@
                     <el-dropdown-item command="b">安全退出</el-dropdown-item>
                 </el-dropdown-menu>
                 </el-dropdown>
+                <a href="">帮助</a>
             </div>
         </div>
         <div class="layout-slider" :style="note">
@@ -121,7 +122,10 @@ export default {
       top: 0;
       left: 0;
       height: 72px;
-      transform: translate(-60%, 0);
+      transform: translate(-72%, 0);
+      a {
+        padding-left: 10px;
+      }
     }
   }
 }

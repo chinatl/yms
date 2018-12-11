@@ -215,7 +215,7 @@
             </el-form-item>
             <el-form-item label="银行卡号：" prop="account">
               <el-input
-                v-model.trim="user_form.account"
+                v-model="user_form.account"
                 placeholder="请输入银行卡号"
                 size="medium"
                 maxlength="20"
@@ -596,7 +596,7 @@ export default {
           this.user_form.receiptorName = data.receiptorName;
           this.user_form.receiptorIdcard = data.receiptorIdcard;
           this.user_form.receiptorPhone = data.receiptorPhone;
-          this.user_form.account = data.account - 0;
+          this.user_form.account = data.account;
           this.idcardFrontPhotoId.id =
             data.idcardFrontPhoto && data.idcardFrontPhoto.fileId;
           this.idcardFrontPhotoId.src =
