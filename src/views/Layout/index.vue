@@ -13,7 +13,7 @@
                     <el-dropdown-item command="b">安全退出</el-dropdown-item>
                 </el-dropdown-menu>
                 </el-dropdown>
-                <a href="">帮助</a>
+                <a href="/用户手册-义务兵申报.pdf" target="_blank">帮助</a>
             </div>
         </div>
         <div class="layout-slider" :style="note">

@@ -81,17 +81,17 @@
     <div class="box-item">
       <t-title>附件资料</t-title>
       <div class="box-item-form">
-        <upload-file bgc='身份证正' info='点击拍摄身份证正面' title="上传领取人身份证正面照片" :data='idcardFrontPhotoId' @upload='upload1'
+        <upload-file bgc='身份证正' info='点击上传' title="上传领取人身份证正面照片" :data='idcardFrontPhotoId' @upload='upload1'
                      @remove='idcardFrontPhotoId.src = ""'></upload-file>
-        <upload-file bgc='身份证反' info='点击拍摄身份证反面' title="上传领取人身份证反面照片" :data='idcardBackPhotoId' @upload='upload2'
+        <upload-file bgc='身份证反' info='点击上传' title="上传领取人身份证反面照片" :data='idcardBackPhotoId' @upload='upload2'
                      @remove='idcardBackPhotoId.src = ""'></upload-file>
-        <upload-file bgc='银行卡' info='点击拍摄银行卡' title="上传银行卡照片" :data='receiptorBankPhotoId' @upload='upload6'
+        <upload-file bgc='银行卡' info='点击上传' title="上传银行卡照片" :data='receiptorBankPhotoId' @upload='upload6'
                      @remove='receiptorBankPhotoId.src = ""'></upload-file>
-        <upload-file bgc='通知书例' info='点击拍摄义务兵入伍通知书' title="上传义务兵入伍通知书照片" :data='csmanNoticePhotoId' @upload='upload4'
+        <upload-file bgc='通知书例' info='点击上传' title="上传义务兵入伍通知书照片" :data='csmanNoticePhotoId' @upload='upload4'
                      @remove='csmanNoticePhotoId.src = ""'></upload-file>
-        <upload-file bgc='户口本' info='点击拍摄义务兵户口本' title="上传义务兵户口本照片" :data='csmanHukouPhotoId' @upload='upload5'
+        <upload-file bgc='户口本' info='点击上传' title="上传义务兵户口本照片" :data='csmanHukouPhotoId' @upload='upload5'
                      @remove='csmanHukouPhotoId.src = ""'></upload-file>
-        <upload-file bgc='人物照片' info='点击拍摄办理人照片' title="上传办理人照片" :data='transactorPhotoId' @upload='upload3'
+        <upload-file bgc='人物照片' info='点击上传' title="上传办理人照片" :data='transactorPhotoId' @upload='upload3'
                      @remove='transactorPhotoId.src = ""'></upload-file>
       </div>
     </div>
