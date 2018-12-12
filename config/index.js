@@ -14,10 +14,10 @@ module.exports = {
         // 测试环境
         // target: 'http://192.168.31.72:8081', // 接口域名 - 尚旭光
         // target: "http://192.168.31.9:8081" // 接口域名 - 陈小东
-        target: "http://192.168.31.204" // 接口域名 - 景蒙
+        // target: "http://192.168.31.204" // 接口域名 - 景蒙
         // target: 'http://192.168.31.10:8081',  // 接口域名 - 陈普
         // target: "http://192.168.31.14:8081" // 接口域名 - 朱文枭
-        // target: "http://192.168.31.204:8081" // 接口域名 - 测试服务
+        target: "http://192.168.31.204:8081" // 接口域名 - 测试服务
 
         // changeOrigin: true,  //是否跨域
         // pathRewrite: {
@@ -41,7 +41,7 @@ module.exports = {
     },
 
     // Various Dev Server settings
-    host: "192.168.31.8", // can be overwritten by process.env.HOST
+    host: "192.168.31.12", // can be overwritten by process.env.HOST
     port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,

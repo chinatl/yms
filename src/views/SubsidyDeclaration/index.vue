@@ -105,7 +105,7 @@
   import tTitle from "@/components/tTitle";
   import uploadFile from "@/components/uploadFile";
   import region from "@/assets/region";
-  import {validateIdCard, validatePhone} from "@/utils/validate";
+  import {validateIdCard, validatePhone,validateMob} from "@/utils/validate";
   import {mapGetters} from "vuex";
 
   export default {
@@ -204,7 +204,7 @@
         if (!value) {
           callback(new Error("请输入联系电话"));
         } else {
-          if (!validatePhone(value)) {
+          if (!validatePhone(value) && !validateMob(value)) {
             callback(new Error("电话号不合法"));
           } else {
             callback();
