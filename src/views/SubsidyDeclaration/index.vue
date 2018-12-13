@@ -308,6 +308,15 @@
         this.getUserApplyInfo(this.applyInfo.csmanNoticeNo);
         this.isEdit = true
       }
+      this.$post(`yfcsman/yfCsmanList/${this.user_info.phone}`, {
+        current: 1, //当前页
+        size: 1
+      })
+        .then(res => {
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     methods: {
       upload1(e) {

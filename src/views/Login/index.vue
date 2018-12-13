@@ -38,7 +38,7 @@
                   <img :src="require('@/assets/img/塔.png')" alt="" class="login-form-bgc-hat">
                 </div>
               <!--大数据图片-->
-                  <img :src="require('@/assets/img/大数据.png')" alt="" class="big-data">
+                  <img :src="require('@/assets/img/earthdata.png')" alt="" class="big-data">
             </div>
         </div>
         <div class="login-content-bottom">
