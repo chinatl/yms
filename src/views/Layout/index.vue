@@ -91,7 +91,7 @@ export default {
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
 .layout-header {
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: rgba(255, 255, 255,1);
   position: fixed;
   top: 0;
   left: 0;

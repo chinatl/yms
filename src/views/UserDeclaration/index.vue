@@ -228,7 +228,15 @@
       <div class="box-item">
         <t-title>附件资料</t-title>
         <div class="box-item-form">
-          <upload-file
+            <div class="img-list">
+            <viewer :images="Img_list">
+                <div class="img-items" v-for="(img_item,img_index) in Img_list" :key="img_index">
+                    <img :src="img_item.src" alt="" class="preview-img" >
+                    <div>{{img_item.label}}</div>
+                  </div>
+              </viewer>
+      </div> 
+          <!-- <upload-file
             bgc="身份证正"
             info="点击拍摄身份证正面"
             title="上传领取人身份证正面照片"
@@ -249,7 +257,7 @@
             :data="receiptorBankPhotoId"
             :isRemove="false"
           ></upload-file>
-          <upload-file
+          <upload-file 
             bgc="通知书例"
             info="点击拍摄义务兵入伍通知书"
             title="上传义务兵入伍通知书照片"
@@ -269,13 +277,14 @@
             title="上传办理人照片"
             :data="transactorPhotoId"
             :isRemove="false"
-          ></upload-file>
+          ></upload-file> -->
+
         </div>
       </div>
     </div>
     <el-dialog class="common-dialog" title="申报详情" :visible.sync="notApplyData">
       <div class="user-info">
-        <p>当前暂无任何申报,是否立即申报？</p>
+        <p style="margin: 20px 0 10px">当前暂无任何申报,是否立即申报？</p>
       </div>
       <p style="text-align:right;margin: 20px 0 10px">
         <el-button type="primary" size="small" @click="handleToApply">确定</el-button>
@@ -408,6 +417,27 @@ export default {
         receiptorIdcard: "610524196005231256",
         csmanName: "黄宗泽"
       },
+       Img_list: [
+        {
+          label: `上传领取人身份证正面照片`
+        },
+        {
+          label: `上传领取人身份证反面照片`
+        },
+        {
+          label: `上传银行卡照片`
+        },
+        {
+          label: `上传义务兵入伍通知书照片`
+        },
+        {
+          label: `上传义务兵户口本照片`
+        },
+        {
+          src: require(`@/assets/img/人物照片.png`),
+          label: `上传办理人照片`
+        }
+      ],
       loading: true,
       pageSize: 10,
       pageNo: 1,
@@ -597,57 +627,87 @@ export default {
           this.user_form.receiptorIdcard = data.receiptorIdcard;
           this.user_form.receiptorPhone = data.receiptorPhone;
           this.user_form.account = data.account;
-          this.idcardFrontPhotoId.id =
-            data.idcardFrontPhoto && data.idcardFrontPhoto.fileId;
-          this.idcardFrontPhotoId.src =
-            "/" +
+
+           this.Img_list[0].src = "/" +
             `${data.idcardFrontPhoto.attaPath}` +
             "/" +
             `${data.idcardFrontPhoto.smallImgName}`;
-          this.idcardFrontPhotoId.src = this.idcardFrontPhotoId.src;
-          this.idcardBackPhotoId.id =
-            data.idcardBackPhoto && data.idcardBackPhoto.fileId;
-          this.idcardBackPhotoId.src =
-            "/" +
+            this.Img_list[1].src = "/" +
             `${data.idcardBackPhoto.attaPath}` +
             "/" +
             `${data.idcardBackPhoto.smallImgName}`;
-          this.csmanNoticePhotoId.id =
-            data.csmanNoticePhoto && data.csmanNoticePhoto.fileId;
-          this.csmanNoticePhotoId.src =
-            "/" +
-            `${data.csmanNoticePhoto.attaPath}` +
-            "/" +
-            `${data.csmanNoticePhoto.smallImgName}`;
-          this.csmanHukouPhotoId.id =
-            data.csmanHukouPhoto && data.csmanHukouPhoto.fileId;
-          this.csmanHukouPhotoId.src =
-            "/" +
-            `${data.csmanHukouPhoto.attaPath}` +
-            "/" +
-            `${data.csmanHukouPhoto.smallImgName}`;
-          this.receiptorBankPhotoId.id =
-            data.receiptorBankPhoto && data.receiptorBankPhoto.fileId;
-          this.receiptorBankPhotoId.src =
-            "/" +
+            this.Img_list[2].src = "/" +
             `${data.receiptorBankPhoto.attaPath}` +
             "/" +
             `${data.receiptorBankPhoto.smallImgName}`;
-           let tmp = data.transactorPhoto.fileId; 
-           if (!tmp && typeof(tmp)!="undefined" && tmp!=0){ 
-              this.transactorPhotoId = {
-                src: "",
-                id: ""
-              }
-           } else {
-            this.transactorPhotoId.id =
-            data.transactorPhoto && data.transactorPhoto.fileId;
-          this.transactorPhotoId.src =
+            this.Img_list[3].src = "/" +
+            `${data.csmanNoticePhoto.attaPath}` +
             "/" +
-            `${data.transactorPhoto.attaPath}` +
+            `${data.csmanNoticePhoto.smallImgName}`;
+            this.Img_list[4].src = "/" +
+            `${data.csmanHukouPhoto.attaPath}` +
             "/" +
-            `${data.transactorPhoto.smallImgName}`;  
-           }
+            `${data.csmanHukouPhoto.smallImgName}`;
+            if (data.transactorPhoto.fileId + "" === 'null') {
+              this.istransactorPhotoNull = false
+            } else {
+              this.Img_list[5].src =
+              "/" +
+              `${data.transactorPhoto.attaPath}` +
+              "/" +
+              `${data.transactorPhoto.smallImgName}`;
+            }
+          // this.idcardFrontPhotoId.id =
+          //   data.idcardFrontPhoto && data.idcardFrontPhoto.fileId;
+          // this.idcardFrontPhotoId.src =
+          //   "/" +
+          //   `${data.idcardFrontPhoto.attaPath}` +
+          //   "/" +
+          //   `${data.idcardFrontPhoto.smallImgName}`;
+          // this.idcardFrontPhotoId.src = this.idcardFrontPhotoId.src;
+          // this.idcardBackPhotoId.id =
+          //   data.idcardBackPhoto && data.idcardBackPhoto.fileId;
+          // this.idcardBackPhotoId.src =
+          //   "/" +
+          //   `${data.idcardBackPhoto.attaPath}` +
+          //   "/" +
+          //   `${data.idcardBackPhoto.smallImgName}`;
+          // this.csmanNoticePhotoId.id =
+          //   data.csmanNoticePhoto && data.csmanNoticePhoto.fileId;
+          // this.csmanNoticePhotoId.src =
+          //   "/" +
+          //   `${data.csmanNoticePhoto.attaPath}` +
+          //   "/" +
+          //   `${data.csmanNoticePhoto.smallImgName}`;
+          // this.csmanHukouPhotoId.id =
+          //   data.csmanHukouPhoto && data.csmanHukouPhoto.fileId;
+          // this.csmanHukouPhotoId.src =
+          //   "/" +
+          //   `${data.csmanHukouPhoto.attaPath}` +
+          //   "/" +
+          //   `${data.csmanHukouPhoto.smallImgName}`;
+          // this.receiptorBankPhotoId.id =
+          //   data.receiptorBankPhoto && data.receiptorBankPhoto.fileId;
+          // this.receiptorBankPhotoId.src =
+          //   "/" +
+          //   `${data.receiptorBankPhoto.attaPath}` +
+          //   "/" +
+          //   `${data.receiptorBankPhoto.smallImgName}`;
+          //  let tmp = data.transactorPhoto.fileId; 
+          //  if (!tmp && typeof(tmp)!="undefined" && tmp!=0){ 
+          //     this.transactorPhotoId = {
+          //       src: "",
+          //       id: ""
+          //     }
+          //  } else {
+          //   this.transactorPhotoId.id =
+          //   data.transactorPhoto && data.transactorPhoto.fileId;
+          // this.transactorPhotoId.src =
+          //   "/" +
+          //   `${data.transactorPhoto.attaPath}` +
+          //   "/" +
+          //   `${data.transactorPhoto.smallImgName}`;  
+          //  }
           this.userId = data.userId;
           this.id = data.id;
         })
@@ -701,9 +761,11 @@ export default {
   }
 }
 .user-info {
-  padding: 0 60px;
+  // > p  {
+    
+  // }
   p {
-    margin-bottom: 12px;
+    margin: 12px;
     font-size: 15px;
     span:nth-of-type(1) {
       display: inline-block;
@@ -718,4 +780,29 @@ export default {
     }
   }
 }
+.img-list {
+      padding: 20px 20px;
+      text-align: center;
+      > div {
+        display: flex;
+        flex-wrap: wrap;
+      }
+      .img-items {
+         width: 316px;
+          height: 205px;
+           margin-top: 20px;
+           margin-bottom: 20px;
+           margin-right: 60px;
+            border-radius: 8px;
+           cursor: pointer;
+           background-color: #e9f5fd;
+            // background-repeat: no-repeat;
+            // background-position: center
+            img {
+            width: 100%;
+            height: 100%;
+                border: 1px solid #efefef;
+          }
+      }
+    }
 </style>

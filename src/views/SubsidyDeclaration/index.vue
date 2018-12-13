@@ -296,11 +296,6 @@
     computed: {
       ...mapGetters([`applyInfo`, `dict_edu`, `user_info`])
     },
-    watch: {
-      // 'user_form.account': function (val) {
-      //   this.user_form.account = val - 0
-      // }
-    },
     created() {
       var list = region["100000"];
       for (let key in list) {
@@ -432,7 +427,7 @@
             this.user_form.receiptorName = data.receiptorName;
             this.user_form.receiptorIdcard = data.receiptorIdcard;
             this.user_form.receiptorPhone = data.receiptorPhone;
-            this.user_form.account = data.account - 0;
+            this.user_form.account = data.account;
             if (data.idcardFrontPhoto.fileId !== null) {
               this.idcardFrontPhotoId.id =
                 data.idcardFrontPhoto && data.idcardFrontPhoto.fileId;
@@ -530,4 +525,3 @@
     }
   };
 </script>
-
