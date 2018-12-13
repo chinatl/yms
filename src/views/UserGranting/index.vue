@@ -7,7 +7,7 @@
           <el-table-column prop="CSMAN_NAME" align='center' label="义务兵"></el-table-column>
           <el-table-column prop="RECEIPTOR_NAME" align='center' label="领取人"></el-table-column>
           <el-table-column prop="RECEIPTOR_PHONE" align='center' label="联系方式"></el-table-column>
-          <el-table-column prop="ACCOUNT" align='center' label="补助账号"></el-table-column>
+          <el-table-column prop="ACCOUNT" align='center' label="补助账号" width="200"></el-table-column>
           <el-table-column prop="ARMS_TYPE" align='center' label="优抚类别">
             <template slot-scope="scope">
               {{getYfType(scope.row.ARMS_TYPE)}}

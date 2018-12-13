@@ -26,6 +26,15 @@ import {
   Tooltip,
   Popover
 } from 'element-ui';
+import Viewer from 'v-viewer'
+import 'viewerjs/dist/viewer.css'
+
+//Vue.use(Viewer) 默认配置写法
+Vue.use(Viewer, {
+    defaultOptions: {
+        zIndex: 9999
+    }
+})
 Vue.use(Button)
 Vue.use(FormItem)
 Vue.use(Form)

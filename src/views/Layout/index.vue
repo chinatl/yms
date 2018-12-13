@@ -13,7 +13,7 @@
                     <el-dropdown-item command="b">安全退出</el-dropdown-item>
                 </el-dropdown-menu>
                 </el-dropdown>
-                <a href="">帮助</a>
+                <a href="/用户手册-义务兵申报.pdf" target="_blank">帮助</a>
             </div>
         </div>
         <div class="layout-slider" :style="note">
@@ -91,7 +91,7 @@ export default {
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
 .layout-header {
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: rgba(255, 255, 255,1);
   position: fixed;
   top: 0;
   left: 0;
